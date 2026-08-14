@@ -1,63 +1,80 @@
-# 🚌 Rio Bus Alert (Nome de Desenvolvimento)
+# Rio Bus Alert
 
-> **Aplicativo de Mobilidade Urbana, Notificação em Segundo Plano & Inteligência de Dados Espaciais para o Rio de Janeiro**
-
-Este projeto é uma plataforma completa de mobilidade urbana projetada desde o dia 1 com **Clean Architecture**, **Engenharia de Dados (GTFS + Data.rio)** e **Modelagem Estatística Preditiva**.
+Sistema de Mobilidade Urbana, Notificação em Segundo Plano e Inteligência de Dados Espaciais para o Rio de Janeiro.
 
 ---
 
-## 🎯 Proposta de Valor
+## Visão Geral do Projeto
 
-1. **Seleção Direta (Ponto A ➔ Ponto B):** Filtro instantâneo de quais linhas de ônibus conectam o ponto de origem ao destino final.
-2. **Localização em Tempo Real:** Visualização no mapa dos ônibus municipais em trânsito via sinal de GPS dos dados abertos da prefeitura do Rio de Janeiro.
-3. **Alerta de Desembarque em Segundo Plano (Geofencing):** Sistema de vigilância por GPS que avisa o usuário (som + vibração) quando ele se aproxima do ponto final desejado, mesmo com a tela do celular bloqueada.
-4. **ETA Probabilístico:** Cálculo do tempo de chegada com intervalo de confiança estatístico de 95%, ajustado pela velocidade da frota em tempo real.
+Este projeto é uma plataforma de mobilidade urbana desenvolvida sob os princípios de Clean Architecture, Engenharia de Dados (GTFS + Data.rio) e Modelagem Estatística Preditiva.
+
+O objetivo principal é solucionar a necessidade de navegação e notificação em transporte público através de uma interface direta e desacoplada de ruídos visuais ou complexidades desnecessárias.
 
 ---
 
-## 🏗️ Arquitetura do Sistema
+## Recursos Principais
+
+1. **Seleção Direta de Linhas (Ponto A para Ponto B):** Filtragem determinística de linhas de ônibus que conectam diretamente a origem ao destino selecionado pelo usuário.
+2. **Localização em Tempo Real:** Mapeamento dinâmico da frota de ônibus municipais utilizando a API de telemetria pública da prefeitura do Rio de Janeiro.
+3. **Alerta de Desembarque em Segundo Plano (Geofencing):** Serviço contínuo de monitoramento de coordenadas em segundo plano que notifica o usuário via áudio e vibração ao atingir o raio de proximidade do ponto final.
+4. **Cálculo de ETA Probabilístico:** Estimativa do tempo de chegada com intervalo de confiança estatístico baseado na velocidade operacional da frota.
+
+---
+
+## Arquitetura do Sistema
 
 ```
 rio-bus-alert/
-├── assets/                  # Sons de alarme, ícones e splash screens
+├── assets/                  # Arquivos de mídia, sons e ícones do sistema
 ├── src/
-│   ├── config/              # Variáveis de ambiente e constantes (.env)
-│   ├── domain/              # Lógica de Negócio e Estatística (Fórmula de Haversine, Geofencing, ETA)
-│   ├── services/            # Serviços de integração (API Data.rio, Supabase Client)
-│   ├── components/          # Componentes de interface do React Native (Mapas, Cards, Banners)
-│   ├── screens/             # Telas do aplicativo (Busca, Trajeto, Alerta)
-│   └── navigation/          # Roteamento de telas
-├── scripts/                 # Pipelines de ETL em Node.js/Python para tratamento dos dados GTFS
-└── app.json                 # Configurações do Expo (Permissões de GPS em Background)
+│   ├── config/              # Variáveis de ambiente e constantes do sistema
+│   ├── domain/              # Lógica de negócio, geometria espacial e algoritmos de ETA
+│   ├── services/            # Clientes de comunicação com a API Data.rio e banco de dados
+│   ├── components/          # Componentes de interface do React Native
+│   ├── screens/             # Visões principais da aplicação
+│   └── navigation/          # Controle de rotas e fluxo de telas
+├── scripts/                 # Pipelines de ETL para processamento de dados GTFS
+└── app.json                 # Configurações de permissões de sistema do Expo
 ```
 
 ---
 
-## 🔒 Propriedade Intelectual & Modelo Híbrido
+## Modelo de Propriedade Intelectual e Segurança
 
-Para fins de portfólio profissional e exibição técnica:
-* **Interface & Client Mobile:** Código do aplicativo aberto para auditoria e demonstração de engenharia no GitHub.
-* **Pipeline de Dados & Banco Espacial:** Módulos de agregação espacial PostGIS e microsserviços privados de tratamento de dados mantidos em ambiente seguro de nuvem (Supabase + Render/Vercel).
+A estrutura do projeto adota o padrão de repositório público com pipeline privado:
+
+* **Cliente Mobile (Repositório Público):** O código da aplicação cliente permanece visível para auditoria técnica e avaliação de portfólio sob a licença GNU General Public License v3.0 (GPL-3.0).
+* **Processamento de Dados e Backend (Ambiente Privado):** Os módulos de agregação espacial PostGIS, pipelines de ETL e credenciais de produção permanecem isolados em infraestrutura de nuvem.
 
 ---
 
-## 🚀 Como Executar o Projeto
+## Instalação e Execução
 
+### Pré-requisitos
+* Node.js (versão 18 ou superior)
+* Gerenciador de pacotes npm ou yarn
+
+### Instruções
+
+1. Instalar as dependências do projeto:
 ```bash
-# 1. Instalar as dependências
 npm install
+```
 
-# 2. Executar o teste do consumo da API de GPS do Rio de Janeiro
-npm run datario:test
+2. Executar a verificação de conectividade com a API de telemetria:
+```bash
+node scripts/test_datario_api.js
+```
 
-# 3. Iniciar o projeto no Expo
+3. Iniciar o servidor de desenvolvimento do Expo:
+```bash
 npm start
 ```
 
 ---
 
-## 📊 Tecnologias Utilizadas
+## Tecnologias e Bibliotecas
 
-* **Mobile App:** React Native, Expo, TypeScript, `react-native-maps`, `expo-location`, `expo-notifications`.
-* **Banco de Dados (Nuvem):** PostgreSQL 15+ com extensão **PostGIS** hospedado no Supabase (AWS São Paulo).
-* **Fontes de Dados:** GTFS Estático (Data.rio / SMTR-RJ) + API REST em tempo real da frota de ônibus do Rio de Janeiro.
+* **Frontend Mobile:** React Native, Expo, TypeScript, React Native Maps, Expo Location, Expo Notifications.
+* **Banco de Dados Relacional Espacial:** PostgreSQL 15+ com extensão PostGIS.
+* **Fontes de Dados:** GTFS Estático (Data.rio / SMTR-RJ) e API REST de telemetria em tempo real.
