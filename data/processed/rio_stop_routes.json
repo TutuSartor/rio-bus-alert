@@ -1,0 +1,98 @@
+[
+  {
+    "stopId": "STOP_474_01",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_01",
+    "routeId": "309"
+  },
+  {
+    "stopId": "STOP_474_01",
+    "routeId": "315"
+  },
+  {
+    "stopId": "STOP_474_02",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_03",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_04",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_05",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_06",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_07",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_08",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_08",
+    "routeId": "483"
+  },
+  {
+    "stopId": "STOP_474_09",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_474_09",
+    "routeId": "483"
+  },
+  {
+    "stopId": "STOP_474_10",
+    "routeId": "474"
+  },
+  {
+    "stopId": "STOP_606_01",
+    "routeId": "606"
+  },
+  {
+    "stopId": "STOP_606_02",
+    "routeId": "606"
+  },
+  {
+    "stopId": "STOP_606_03",
+    "routeId": "606"
+  },
+  {
+    "stopId": "STOP_606_03",
+    "routeId": "457"
+  },
+  {
+    "stopId": "STOP_606_04",
+    "routeId": "606"
+  },
+  {
+    "stopId": "STOP_309_01",
+    "routeId": "309"
+  },
+  {
+    "stopId": "STOP_309_01",
+    "routeId": "315"
+  },
+  {
+    "stopId": "STOP_309_02",
+    "routeId": "309"
+  },
+  {
+    "stopId": "STOP_309_03",
+    "routeId": "309"
+  },
+  {
+    "stopId": "STOP_309_03",
+    "routeId": "474"
+  }
+]

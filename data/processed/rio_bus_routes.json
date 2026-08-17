@@ -1,0 +1,38 @@
+[
+  {
+    "id": "474",
+    "shortName": "474",
+    "longName": "Jacaré x Jardim de Alah (Via Lapa / Copacabana)",
+    "category": "Zona Norte / Zona Sul"
+  },
+  {
+    "id": "606",
+    "shortName": "606",
+    "longName": "Rodoviária x Engenho de Dentro (Via Tijuca / Maracanã)",
+    "category": "Zona Norte / Centro"
+  },
+  {
+    "id": "309",
+    "shortName": "309",
+    "longName": "Central x Alvorada (Via Botafogo / Copacabana / Barra)",
+    "category": "Centro / Zona Sul / Barra"
+  },
+  {
+    "id": "483",
+    "shortName": "483",
+    "longName": "Penha x General Osório (Via Linha Vermelha / Copacabana)",
+    "category": "Zona Norte / Zona Sul"
+  },
+  {
+    "id": "457",
+    "shortName": "457",
+    "longName": "Abolição x Copacabana (Via Túnel Rebouças / Botafogo)",
+    "category": "Zona Norte / Zona Sul"
+  },
+  {
+    "id": "315",
+    "shortName": "315",
+    "longName": "Central x Recreio dos Bandeirantes (Via Linha Amarela)",
+    "category": "Centro / Zona Oeste"
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "STOP_474_01",
+    "name": "Terminal Central do Brasil (Plataforma A)",
+    "latitude": -22.9035,
+    "longitude": -43.1914,
+    "neighborhood": "Centro"
+  },
+  {
+    "id": "STOP_474_02",
+    "name": "Praça da República (Próximo ao Campo de Santana)",
+    "latitude": -22.9068,
+    "longitude": -43.1892,
+    "neighborhood": "Centro"
+  },
+  {
+    "id": "STOP_474_03",
+    "name": "Rua Primeiro de Março (Próximo à Candelária)",
+    "latitude": -22.9008,
+    "longitude": -43.1772,
+    "neighborhood": "Centro"
+  },
+  {
+    "id": "STOP_474_04",
+    "name": "Avenida Rio Branco (Esquina com Av. Presidente Vargas)",
+    "latitude": -22.9022,
+    "longitude": -43.1795,
+    "neighborhood": "Centro"
+  },
+  {
+    "id": "STOP_474_05",
+    "name": "Rua do Catete (Estação Metrô Catete)",
+    "latitude": -22.9258,
+    "longitude": -43.1764,
+    "neighborhood": "Catete"
+  },
+  {
+    "id": "STOP_474_06",
+    "name": "Praia do Flamengo (Próximo ao Parque das Crianças)",
+    "latitude": -22.932,
+    "longitude": -43.1725,
+    "neighborhood": "Flamengo"
+  },
+  {
+    "id": "STOP_474_07",
+    "name": "Avenida Princesa Isabel (Próximo ao Túnel Novo)",
+    "latitude": -22.9615,
+    "longitude": -43.1748,
+    "neighborhood": "Leme / Copacabana"
+  },
+  {
+    "id": "STOP_474_08",
+    "name": "Avenida Nossa Senhora de Copacabana (Próximo à Siqueira Campos)",
+    "latitude": -22.9698,
+    "longitude": -43.1865,
+    "neighborhood": "Copacabana"
+  },
+  {
+    "id": "STOP_474_09",
+    "name": "Rua Visconde de Pirajá (Praça Nossa Senhora da Paz)",
+    "latitude": -22.9836,
+    "longitude": -43.2039,
+    "neighborhood": "Ipanema"
+  },
+  {
+    "id": "STOP_474_10",
+    "name": "Terminal Jacaré (Ponto Final)",
+    "latitude": -22.8932,
+    "longitude": -43.2561,
+    "neighborhood": "Jacaré / Zona Norte"
+  },
+  {
+    "id": "STOP_606_01",
+    "name": "Rodoviária Novo Rio (Terminal de Ônibus Urbano)",
+    "latitude": -22.8988,
+    "longitude": -43.2095,
+    "neighborhood": "Santo Cristo"
+  },
+  {
+    "id": "STOP_606_02",
+    "name": "Avenida Maracanã (Estação de Metrô Maracanã)",
+    "latitude": -22.9125,
+    "longitude": -43.2301,
+    "neighborhood": "Maracanã"
+  },
+  {
+    "id": "STOP_606_03",
+    "name": "Praça Saens Peña (Rua Conde de Bonfim)",
+    "latitude": -22.9242,
+    "longitude": -43.2335,
+    "neighborhood": "Tijuca"
+  },
+  {
+    "id": "STOP_606_04",
+    "name": "Terminal Engenho de Dentro (Estação de Trem)",
+    "latitude": -22.8975,
+    "longitude": -43.2952,
+    "neighborhood": "Engenho de Dentro"
+  },
+  {
+    "id": "STOP_309_01",
+    "name": "Terminal Alvorada (Plataforma BRT e Linhas Diretas)",
+    "latitude": -23.0001,
+    "longitude": -43.3654,
+    "neighborhood": "Barra da Tijuca"
+  },
+  {
+    "id": "STOP_309_02",
+    "name": "Avenida das Américas (Shopping Barra Shopping)",
+    "latitude": -23.0008,
+    "longitude": -43.3512,
+    "neighborhood": "Barra da Tijuca"
+  },
+  {
+    "id": "STOP_309_03",
+    "name": "Avenida Lauro Sodré (Shopping RioSul)",
+    "latitude": -22.9568,
+    "longitude": -43.1769,
+    "neighborhood": "Botafogo"
+  }
+]
