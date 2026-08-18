@@ -5,6 +5,8 @@
  */
 
 import { ENV } from '../config/env';
+import localStops from '../../data/processed/rio_bus_stops.json';
+import localRoutes from '../../data/processed/rio_bus_routes.json';
 
 export interface BusStopCloud {
   id: string;
@@ -38,11 +40,16 @@ export async function fetchStopsFromCloud(): Promise<BusStopCloud[]> {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
 
-    const data: BusStopCloud[] = await response.json();
-    return data;
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+
+    return getFallbackStops();
   } catch (error) {
-    console.warn('[Supabase Cloud] Falha na consulta em nuvem, usando dados de fallback:', error);
-    return [];
+    console.warn('[Supabase Cloud] Usando pontos de fallback local:', error);
+    return getFallbackStops();
   }
 }
 
@@ -62,10 +69,35 @@ export async function fetchRoutesFromCloud(): Promise<BusRouteCloud[]> {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
 
-    const data: BusRouteCloud[] = await response.json();
-    return data;
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+
+    return getFallbackRoutes();
   } catch (error) {
-    console.warn('[Supabase Cloud] Falha na consulta de linhas:', error);
-    return [];
+    console.warn('[Supabase Cloud] Usando linhas de fallback local:', error);
+    return getFallbackRoutes();
   }
+}
+
+function getFallbackStops(): BusStopCloud[] {
+  return localStops.map((s) => ({
+    id: s.id,
+    nome: s.name,
+    bairro: s.neighborhood || 'Rio de Janeiro',
+    latitude: s.latitude,
+    longitude: s.longitude,
+  }));
+}
+
+function getFallbackRoutes(): BusRouteCloud[] {
+  return localRoutes.map((r) => ({
+    id: r.id,
+    numero: r.shortName,
+    nome_longo: r.longName,
+    categoria: r.category || 'Municipal',
+    cor_hex: '#3B82F6',
+  }));
 }

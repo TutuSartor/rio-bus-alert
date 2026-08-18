@@ -11,6 +11,7 @@ export default function App() {
   const [routes, setRoutes] = useState<BusRouteCloud[]>([]);
   const [liveBuses, setLiveBuses] = useState<BusPosition[]>([]);
   const [selectedRoute, setSelectedRoute] = useState<string>('474');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadCloudData();
@@ -18,18 +19,20 @@ export default function App() {
 
   async function loadCloudData() {
     setLoading(true);
+    setErrorMessage(null);
     try {
       const [cloudStops, cloudRoutes, buses] = await Promise.all([
-        fetchStopsFromCloud(),
-        fetchRoutesFromCloud(),
-        fetchLiveBusPositions(selectedRoute),
+        fetchStopsFromCloud().catch(() => []),
+        fetchRoutesFromCloud().catch(() => []),
+        fetchLiveBusPositions(selectedRoute).catch(() => []),
       ]);
 
-      setStops(cloudStops);
-      setRoutes(cloudRoutes);
-      setLiveBuses(buses);
-    } catch (error) {
+      setStops(Array.isArray(cloudStops) ? cloudStops : []);
+      setRoutes(Array.isArray(cloudRoutes) ? cloudRoutes : []);
+      setLiveBuses(Array.isArray(buses) ? buses : []);
+    } catch (error: any) {
       console.error('Erro ao carregar dados:', error);
+      setErrorMessage(error?.message || 'Falha ao conectar com os serviços.');
     } finally {
       setLoading(false);
     }
@@ -38,10 +41,19 @@ export default function App() {
   async function handleFilterLine(lineNumber: string) {
     setSelectedRoute(lineNumber);
     setLoading(true);
-    const buses = await fetchLiveBusPositions(lineNumber);
-    setLiveBuses(buses);
-    setLoading(false);
+    try {
+      const buses = await fetchLiveBusPositions(lineNumber);
+      setLiveBuses(Array.isArray(buses) ? buses : []);
+    } catch (err) {
+      console.warn('Erro ao filtrar linha:', err);
+    } finally {
+      setLoading(false);
+    }
   }
+
+  const safeStops = Array.isArray(stops) ? stops : [];
+  const safeRoutes = Array.isArray(routes) ? routes : [];
+  const safeBuses = Array.isArray(liveBuses) ? liveBuses : [];
 
   return (
     <View style={styles.container}>
@@ -65,6 +77,12 @@ export default function App() {
           <ActivityIndicator size="large" color="#3B82F6" style={{ marginTop: 40 }} />
         ) : (
           <>
+            {errorMessage && (
+              <View style={styles.errorBox}>
+                <Text style={styles.errorText}>{errorMessage}</Text>
+              </View>
+            )}
+
             {/* Seletor de Linhas */}
             <Text style={styles.sectionTitle}>Selecione a Linha em Trânsito</Text>
             <View style={styles.routesContainer}>
@@ -93,10 +111,10 @@ export default function App() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Telemetria em Tempo Real (Data.rio)</Text>
               <Text style={styles.cardDetail}>
-                Ônibus ativos na linha {selectedRoute}: <Text style={styles.boldText}>{liveBuses.length} veículos</Text>
+                Ônibus ativos na linha {selectedRoute}: <Text style={styles.boldText}>{safeBuses.length} veículos</Text>
               </Text>
-              {liveBuses.slice(0, 3).map((bus, idx) => (
-                <View key={idx} style={styles.busRow}>
+              {safeBuses.slice(0, 3).map((bus, idx) => (
+                <View key={bus.ordem || idx} style={styles.busRow}>
                   <Text style={styles.busCode}>Veículo {bus.ordem}</Text>
                   <Text style={styles.busSpeed}>{bus.velocidade} km/h</Text>
                 </View>
@@ -107,17 +125,17 @@ export default function App() {
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Base de Dados Espacial (PostGIS)</Text>
               <Text style={styles.cardDetail}>
-                Pontos de Ônibus no Banco: <Text style={styles.boldText}>{stops.length} pontos</Text>
+                Pontos de Ônibus no Banco: <Text style={styles.boldText}>{safeStops.length} pontos</Text>
               </Text>
               <Text style={styles.cardDetail}>
-                Linhas Cadastradas: <Text style={styles.boldText}>{routes.length} linhas</Text>
+                Linhas Cadastradas: <Text style={styles.boldText}>{safeRoutes.length} linhas</Text>
               </Text>
             </View>
 
             {/* Amostra dos Pontos de Ônibus */}
             <Text style={styles.sectionTitle}>Pontos Cadastrados no Rio</Text>
-            {stops.slice(0, 4).map((stop) => (
-              <View key={stop.id} style={styles.stopCard}>
+            {safeStops.slice(0, 4).map((stop, idx) => (
+              <View key={stop.id || idx} style={styles.stopCard}>
                 <Text style={styles.stopName}>{stop.nome}</Text>
                 <Text style={styles.stopNeighborhood}>{stop.bairro}</Text>
               </View>
@@ -268,5 +286,15 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontSize: 12,
     marginTop: 2,
+  },
+  errorBox: {
+    backgroundColor: '#7F1D1D',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 15,
+  },
+  errorText: {
+    color: '#FCA5A5',
+    fontSize: 13,
   },
 });
