@@ -1,56 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-
-// Definição das 4 Paletas de Cores Profissionais
-const PALETTES = {
-  emerald: {
-    name: 'Carioca Emerald (Transit Rio)',
-    bg: '#090D16',
-    card: '#131B2E',
-    border: 'rgba(16, 185, 129, 0.2)',
-    primary: '#10B981', // Verde Esmeralda
-    accent: '#06B6D4',
-    text: '#F8FAFC',
-    subtext: '#94A3B8',
-    badge: '#064E3B',
-  },
-  indigo: {
-    name: 'Electric Indigo (Kole Jain / Linear)',
-    bg: '#0A0A0F',
-    card: '#141420',
-    border: 'rgba(99, 102, 241, 0.25)',
-    primary: '#6366F1', // Indigo Elétrico
-    accent: '#EC4899',
-    text: '#FFFFFF',
-    subtext: '#A1A1AA',
-    badge: '#312E81',
-  },
-  amber: {
-    name: 'Onyx & Sun Amber (High Contrast)',
-    bg: '#121214',
-    card: '#202024',
-    border: 'rgba(245, 158, 11, 0.25)',
-    primary: '#F59E0B', // Âmbar Solar
-    accent: '#38BDF8',
-    text: '#EDEDED',
-    subtext: '#8D8D99',
-    badge: '#78350F',
-  },
-  slate: {
-    name: 'Slate Classic (Tech Blue)',
-    bg: '#0F172A',
-    card: '#1E293B',
-    border: 'rgba(255, 255, 255, 0.08)',
-    primary: '#3B82F6', // Azul Elétrico
-    accent: '#10B981',
-    text: '#F8FAFC',
-    subtext: '#64748B',
-    badge: '#1E3A8A',
-  },
-};
-
-type PaletteKey = keyof typeof PALETTES;
+import { THEME } from './src/config/theme';
 
 const MOCK_STOPS = [
   { id: '1', nome: 'Terminal Central do Brasil', bairro: 'Centro' },
@@ -60,12 +11,9 @@ const MOCK_STOPS = [
 ];
 
 export default function App() {
-  const [currentPalette, setCurrentPalette] = useState<PaletteKey>('emerald');
   const [selectedRoute, setSelectedRoute] = useState<string>('474');
   const [loading, setLoading] = useState<boolean>(false);
   const [busCount, setBusCount] = useState<number>(4);
-
-  const theme = PALETTES[currentPalette];
 
   function handleSelectLine(line: string) {
     setSelectedRoute(line);
@@ -77,66 +25,38 @@ export default function App() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
+    <View style={[styles.container, { backgroundColor: THEME.bg }]}>
       <StatusBar style="light" />
 
       {/* Header Principal */}
       <View style={styles.header}>
-        <Text style={[styles.headerTitle, { color: theme.text }]}>Rio Bus Alert</Text>
-        <Text style={[styles.headerSubtitle, { color: theme.subtext }]}>
+        <Text style={[styles.headerTitle, { color: THEME.text }]}>Rio Bus Alert</Text>
+        <Text style={[styles.headerSubtitle, { color: THEME.subtext }]}>
           Mobilidade Urbana & Alerta de Desembarque
         </Text>
       </View>
 
-      {/* Seletor Interativo de Paleta de Cores */}
-      <View style={styles.paletteSection}>
-        <Text style={[styles.paletteLabel, { color: theme.subtext }]}>Testar Paleta de Cores:</Text>
-        <View style={styles.paletteButtonsRow}>
-          {(Object.keys(PALETTES) as PaletteKey[]).map((key) => (
-            <TouchableOpacity
-              key={key}
-              style={[
-                styles.paletteBtn,
-                { backgroundColor: PALETTES[key].card, borderColor: PALETTES[key].primary },
-                currentPalette === key && { borderWidth: 2, backgroundColor: PALETTES[key].badge },
-              ]}
-              onPress={() => setCurrentPalette(key)}
-            >
-              <View style={[styles.colorDot, { backgroundColor: PALETTES[key].primary }]} />
-              <Text
-                style={[
-                  styles.paletteBtnText,
-                  { color: currentPalette === key ? '#FFFFFF' : theme.subtext },
-                ]}
-              >
-                {key.toUpperCase()}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
       {/* Indicador de Conexão Supabase Cloud */}
-      <View style={[styles.cloudBadge, { backgroundColor: theme.card, borderColor: theme.border }]}>
-        <View style={[styles.statusDot, { backgroundColor: theme.primary }]} />
-        <Text style={[styles.cloudBadgeText, { color: theme.text }]}>
+      <View style={[styles.cloudBadge, { backgroundColor: THEME.card, borderColor: THEME.border }]}>
+        <View style={[styles.statusDot, { backgroundColor: THEME.primary }]} />
+        <Text style={[styles.cloudBadgeText, { color: THEME.text }]}>
           PostgreSQL Supabase (AWS SP) Conectado
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Seletor de Linhas */}
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>Selecione a Linha em Trânsito</Text>
+        <Text style={[styles.sectionTitle, { color: THEME.text }]}>Selecione a Linha em Trânsito</Text>
         <View style={styles.routesContainer}>
           {['474', '606', '309', '483', '457'].map((line) => (
             <TouchableOpacity
               key={line}
               style={[
                 styles.routeChip,
-                { backgroundColor: theme.card, borderColor: theme.border },
+                { backgroundColor: THEME.card, borderColor: THEME.border },
                 selectedRoute === line && {
-                  backgroundColor: theme.primary,
-                  borderColor: theme.primary,
+                  backgroundColor: THEME.primary,
+                  borderColor: THEME.primary,
                 },
               ]}
               onPress={() => handleSelectLine(line)}
@@ -144,7 +64,7 @@ export default function App() {
               <Text
                 style={[
                   styles.routeChipText,
-                  { color: selectedRoute === line ? '#FFFFFF' : theme.subtext },
+                  { color: selectedRoute === line ? '#FFFFFF' : THEME.subtext },
                 ]}
               >
                 Linha {line}
@@ -154,51 +74,51 @@ export default function App() {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 30 }} />
+          <ActivityIndicator size="large" color={THEME.primary} style={{ marginTop: 30 }} />
         ) : (
           <>
             {/* Status da Telemetria GPS */}
-            <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
-              <Text style={[styles.cardTitle, { color: theme.text }]}>Telemetria em Tempo Real (Data.rio)</Text>
-              <Text style={[styles.cardDetail, { color: theme.subtext }]}>
+            <View style={[styles.card, { backgroundColor: THEME.card, borderColor: THEME.border }]}>
+              <Text style={[styles.cardTitle, { color: THEME.text }]}>Telemetria em Tempo Real (Data.rio)</Text>
+              <Text style={[styles.cardDetail, { color: THEME.subtext }]}>
                 Ônibus ativos na linha {selectedRoute}:{' '}
-                <Text style={[styles.boldText, { color: theme.text }]}>{busCount} veículos</Text>
+                <Text style={[styles.boldText, { color: THEME.text }]}>{busCount} veículos</Text>
               </Text>
-              <View style={[styles.busRow, { backgroundColor: theme.bg }]}>
-                <Text style={[styles.busCode, { color: theme.text }]}>Veículo C41001</Text>
-                <Text style={[styles.busSpeed, { color: theme.primary }]}>28 km/h</Text>
+              <View style={[styles.busRow, { backgroundColor: THEME.bg }]}>
+                <Text style={[styles.busCode, { color: THEME.text }]}>Veículo C41001</Text>
+                <Text style={[styles.busSpeed, { color: THEME.primary }]}>28 km/h</Text>
               </View>
-              <View style={[styles.busRow, { backgroundColor: theme.bg }]}>
-                <Text style={[styles.busCode, { color: theme.text }]}>Veículo C41002</Text>
-                <Text style={[styles.busSpeed, { color: theme.primary }]}>18 km/h</Text>
+              <View style={[styles.busRow, { backgroundColor: THEME.bg }]}>
+                <Text style={[styles.busCode, { color: THEME.text }]}>Veículo C41002</Text>
+                <Text style={[styles.busSpeed, { color: THEME.primary }]}>18 km/h</Text>
               </View>
             </View>
 
             {/* Resumo do Banco em Nuvem */}
-            <View style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]}>
-              <Text style={[styles.cardTitle, { color: theme.text }]}>Base de Dados Espacial (PostGIS)</Text>
-              <Text style={[styles.cardDetail, { color: theme.subtext }]}>
+            <View style={[styles.card, { backgroundColor: THEME.card, borderColor: THEME.border }]}>
+              <Text style={[styles.cardTitle, { color: THEME.text }]}>Base de Dados Espacial (PostGIS)</Text>
+              <Text style={[styles.cardDetail, { color: THEME.subtext }]}>
                 Pontos de Ônibus no Banco:{' '}
-                <Text style={[styles.boldText, { color: theme.text }]}>17 pontos</Text>
+                <Text style={[styles.boldText, { color: THEME.text }]}>17 pontos</Text>
               </Text>
-              <Text style={[styles.cardDetail, { color: theme.subtext }]}>
+              <Text style={[styles.cardDetail, { color: THEME.subtext }]}>
                 Linhas Cadastradas:{' '}
-                <Text style={[styles.boldText, { color: theme.text }]}>6 linhas</Text>
+                <Text style={[styles.boldText, { color: THEME.text }]}>6 linhas</Text>
               </Text>
             </View>
 
             {/* Amostra dos Pontos de Ônibus */}
-            <Text style={[styles.sectionTitle, { color: theme.text }]}>Pontos Cadastrados no Rio</Text>
+            <Text style={[styles.sectionTitle, { color: THEME.text }]}>Pontos Cadastrados no Rio</Text>
             {MOCK_STOPS.map((stop) => (
               <View
                 key={stop.id}
                 style={[
                   styles.stopCard,
-                  { backgroundColor: theme.card, borderLeftColor: theme.primary },
+                  { backgroundColor: THEME.card, borderLeftColor: THEME.primary },
                 ]}
               >
-                <Text style={[styles.stopName, { color: theme.text }]}>{stop.nome}</Text>
-                <Text style={[styles.stopNeighborhood, { color: theme.subtext }]}>{stop.bairro}</Text>
+                <Text style={[styles.stopName, { color: THEME.text }]}>{stop.nome}</Text>
+                <Text style={[styles.stopNeighborhood, { color: THEME.subtext }]}>{stop.bairro}</Text>
               </View>
             ))}
           </>
@@ -224,37 +144,6 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 14,
     marginTop: 2,
-  },
-  paletteSection: {
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
-  paletteLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginBottom: 6,
-  },
-  paletteButtonsRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  paletteBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    gap: 6,
-  },
-  colorDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  paletteBtnText: {
-    fontSize: 11,
-    fontWeight: 'bold',
   },
   cloudBadge: {
     flexDirection: 'row',
