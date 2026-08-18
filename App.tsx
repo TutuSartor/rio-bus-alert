@@ -514,10 +514,10 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
 
-  /* Coluna Direita: largura fixa de 88px, alinhamento rigoroso */
+  /* Coluna Direita: largura fixa de 88px, eixo central vertical */
   colRight: {
     width: COLUMNS.etaColumn,
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
@@ -526,8 +526,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     letterSpacing: -1.5,
     lineHeight: 48,
-    textAlign: 'right',
-    // O número ocupa toda a largura da coluna e alinha pela borda direita
+    textAlign: 'center',
     width: '100%',
   },
   /* Os dois arcos ficam posicionados absolutamente no canto superior direito */
@@ -561,7 +560,7 @@ const styles = StyleSheet.create({
   etaUnitText: {
     fontSize: 13,
     fontWeight: '700',
-    textAlign: 'right',
+    textAlign: 'center',
     width: '100%',
     marginTop: -2,
   },
