@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { THEME } from './src/config/theme';
 
 // Lista de Pontos Reais do Rio de Janeiro
@@ -87,7 +88,7 @@ export default function App() {
 
   const selectedStop = RIO_STOPS.find((s) => s.id === selectedStopId) || RIO_STOPS[0];
 
-  // Filtro de Pontos de Ônibus em Tempo Real pela Barra de Pesquisa
+  // Filtro de Pontos em Tempo Real pela Barra de Pesquisa
   const filteredStops = RIO_STOPS.filter((stop) => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return true;
@@ -111,7 +112,6 @@ export default function App() {
   function handleSelectStopFromSearch(stopId: string) {
     setSelectedStopId(stopId);
     setSearchQuery('');
-    // Se o painel estiver muito recolhido, expande para a metade
     if (currentHeightRef.current === SNAP_COLLAPSED) {
       snapTo(SNAP_HALF);
     }
@@ -130,7 +130,7 @@ export default function App() {
           <View style={styles.mapTransitPath2} />
           <View style={styles.mapTransitPath3} />
 
-          {/* Marcadores dos Pontos no Mapa */}
+          {/* Marcadores dos Pontos no Mapa (Ícones Vetoriais) */}
           {RIO_STOPS.map((stop) => {
             const isSelected = stop.id === selectedStopId;
             return (
@@ -151,10 +151,17 @@ export default function App() {
                 <View
                   style={[
                     styles.mapPinInner,
-                    { backgroundColor: isSelected ? THEME.primary : '#27272A' },
+                    {
+                      backgroundColor: isSelected ? THEME.primary : '#1F2937',
+                      borderColor: isSelected ? '#FFFFFF' : 'rgba(255, 255, 255, 0.2)',
+                    },
                   ]}
                 >
-                  <Text style={styles.mapPinIcon}>🚏</Text>
+                  <MaterialCommunityIcons
+                    name="bus-stop"
+                    size={16}
+                    color={isSelected ? '#FFFFFF' : '#9CA3AF'}
+                  />
                 </View>
                 {isSelected && (
                   <View style={styles.mapCallout}>
@@ -165,12 +172,14 @@ export default function App() {
             );
           })}
 
-          {/* Veículo com Telemetria Ativa */}
+          {/* Veículo com Telemetria Ativa (Ícone Vetorial com Pulso) */}
           <View style={[styles.liveBusMarker, { left: '50%', top: '32%' }]}>
             <View style={styles.liveBusPulse} />
-            <Text style={styles.liveBusIcon}>🚌</Text>
+            <View style={styles.liveBusIconCircle}>
+              <Ionicons name="bus" size={18} color="#FFFFFF" />
+            </View>
             <View style={styles.liveBusBadge}>
-              <Text style={styles.liveBusBadgeText}>474 • 28km/h</Text>
+              <Text style={styles.liveBusBadgeText}>474 • 28 km/h</Text>
             </View>
           </View>
         </View>
@@ -206,7 +215,7 @@ export default function App() {
           <View style={styles.dragHandlePill} />
         </View>
 
-        {/* 2. BARRA DE PESQUISA PRIORITÁRIA (TOPO DO PAINEL) */}
+        {/* 2. BARRA DE PESQUISA PRIORITÁRIA (Ícone Vetorial de Lupa) */}
         <View style={styles.searchBarContainer}>
           <View
             style={[
@@ -214,7 +223,7 @@ export default function App() {
               isSearchFocused && styles.searchInputWrapperFocused,
             ]}
           >
-            <Text style={styles.searchIcon}>🔍</Text>
+            <Feather name="search" size={16} color={isSearchFocused ? THEME.primary : THEME.textMuted} style={styles.searchIcon} />
             <TextInput
               style={styles.searchInput}
               placeholder="Para onde você quer ir? (ex: Copacabana, 474...)"
@@ -223,7 +232,6 @@ export default function App() {
               onChangeText={setSearchQuery}
               onFocus={() => {
                 setIsSearchFocused(true);
-                // Quando o usuário foca na busca, expande o painel suavemente
                 if (currentHeightRef.current !== SNAP_EXPANDED) {
                   snapTo(SNAP_EXPANDED);
                 }
@@ -232,7 +240,7 @@ export default function App() {
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearSearchBtn}>
-                <Text style={styles.clearSearchIcon}>✕</Text>
+                <Feather name="x" size={16} color={THEME.textMuted} />
               </TouchableOpacity>
             )}
           </View>
@@ -244,7 +252,7 @@ export default function App() {
           contentContainerStyle={styles.sheetContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Se houver texto digitado na pesquisa: exibe resultados filtrados */}
+          {/* Se houver busca: exibe resultados filtrados */}
           {searchQuery.trim().length > 0 ? (
             <View>
               <Text style={styles.sectionHeaderLabel}>
@@ -257,7 +265,7 @@ export default function App() {
                   onPress={() => handleSelectStopFromSearch(stop.id)}
                 >
                   <View style={styles.searchResultPinIcon}>
-                    <Text style={{ fontSize: 16 }}>🚏</Text>
+                    <MaterialCommunityIcons name="bus-stop" size={18} color={THEME.primary} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.searchResultName}>{stop.nome}</Text>
@@ -265,7 +273,7 @@ export default function App() {
                       {stop.bairro} • Linhas: {stop.lines.join(', ')}
                     </Text>
                   </View>
-                  <Text style={styles.searchResultSelectArrow}>➔</Text>
+                  <Feather name="chevron-right" size={18} color={THEME.primary} />
                 </TouchableOpacity>
               ))}
             </View>
@@ -273,12 +281,15 @@ export default function App() {
             <>
               {/* CARTÃO DO PONTO SELECIONADO ATIVO */}
               <View style={styles.stopInfoCard}>
-                <View>
-                  <Text style={styles.stopNeighborhoodTag}>{selectedStop.bairro.toUpperCase()}</Text>
-                  <Text style={styles.stopNameSelected}>{selectedStop.nome}</Text>
+                <View style={styles.stopHeaderRow}>
+                  <View>
+                    <Text style={styles.stopNeighborhoodTag}>{selectedStop.bairro.toUpperCase()}</Text>
+                    <Text style={styles.stopNameSelected}>{selectedStop.nome}</Text>
+                  </View>
+                  <MaterialCommunityIcons name="bus-stop" size={24} color={THEME.primary} />
                 </View>
 
-                {/* Botão de Alerta de Desembarque */}
+                {/* Botão de Alerta de Desembarque (Ícone Vetorial de Notificação) */}
                 <TouchableOpacity
                   style={[
                     styles.alertToggleBtn,
@@ -286,13 +297,19 @@ export default function App() {
                   ]}
                   onPress={() => setAlertActive(!alertActive)}
                 >
+                  <Ionicons
+                    name={alertActive ? 'notifications' : 'notifications-outline'}
+                    size={16}
+                    color="#FFFFFF"
+                    style={{ marginRight: 6 }}
+                  />
                   <Text style={styles.alertToggleText}>
-                    {alertActive ? '🔔 Alerta Ativo (300m)' : '🔕 Ativar Alerta de Desembarque'}
+                    {alertActive ? 'Alerta Ativo (300m)' : 'Ativar Alerta de Desembarque'}
                   </Text>
                 </TouchableOpacity>
               </View>
 
-              {/* LISTA DE LINHAS QUE PASSAM NO PONTO */}
+              {/* LISTA DE LINHAS NO ESTILO TRANSIT APP */}
               <Text style={styles.linesSectionTitle}>
                 Linhas que passam neste ponto ({selectedStop.lines.length}):
               </Text>
@@ -393,14 +410,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
     shadowColor: '#6366F1',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
     shadowRadius: 6,
-  },
-  mapPinIcon: {
-    fontSize: 14,
   },
   mapCallout: {
     backgroundColor: '#141420',
@@ -427,17 +440,24 @@ const styles = StyleSheet.create({
     height: 44,
     borderRadius: 22,
     backgroundColor: 'rgba(99, 102, 241, 0.35)',
-    top: -6,
+    top: -4,
   },
-  liveBusIcon: {
-    fontSize: 22,
+  liveBusIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#4F46E5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
   },
   liveBusBadge: {
     backgroundColor: '#312E81',
     paddingVertical: 2,
     paddingHorizontal: 6,
     borderRadius: 4,
-    marginTop: 2,
+    marginTop: 3,
     borderWidth: 1,
     borderColor: '#6366F1',
   },
@@ -547,7 +567,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   searchIcon: {
-    fontSize: 14,
     marginRight: 8,
   },
   searchInput: {
@@ -559,11 +578,6 @@ const styles = StyleSheet.create({
   } as any,
   clearSearchBtn: {
     padding: 4,
-  },
-  clearSearchIcon: {
-    color: '#71717A',
-    fontSize: 14,
-    fontWeight: 'bold',
   },
 
   /* --- Conteúdo do Painel --- */
@@ -596,10 +610,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#312E81',
+    backgroundColor: '#1E1E30',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
   },
   searchResultName: {
     color: '#FFFFFF',
@@ -611,12 +627,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  searchResultSelectArrow: {
-    color: '#6366F1',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 8,
-  },
 
   /* --- Cartão do Ponto --- */
   stopInfoCard: {
@@ -626,6 +636,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(99, 102, 241, 0.2)',
     marginBottom: 16,
+  },
+  stopHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
   },
   stopNeighborhoodTag: {
     color: '#6366F1',
@@ -638,12 +654,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 2,
-    marginBottom: 12,
   },
   alertToggleBtn: {
+    flexDirection: 'row',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   alertToggleBtnInactive: {
     backgroundColor: '#312E81',
