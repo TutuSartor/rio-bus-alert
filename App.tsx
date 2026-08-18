@@ -14,15 +14,15 @@ import { THEME } from './src/config/theme';
 
 // Lista de Pontos Reais do Rio de Janeiro
 const RIO_STOPS = [
-  { id: 'STOP_474_01', nome: 'Central do Brasil', bairro: 'Centro', x: 48, y: 32, lines: ['474', '309', '315'] },
-  { id: 'STOP_474_02', nome: 'Praça da República', bairro: 'Centro', x: 42, y: 36, lines: ['474'] },
-  { id: 'STOP_474_03', nome: 'Candelária', bairro: 'Centro', x: 58, y: 28, lines: ['474'] },
-  { id: 'STOP_474_05', nome: 'Metrô Catete', bairro: 'Catete', x: 52, y: 52, lines: ['474'] },
-  { id: 'STOP_474_06', nome: 'Praia do Flamengo', bairro: 'Flamengo', x: 60, y: 60, lines: ['474'] },
-  { id: 'STOP_474_08', nome: 'Copacabana (Siqueira Campos)', bairro: 'Copacabana', x: 68, y: 78, lines: ['474', '483'] },
-  { id: 'STOP_474_09', nome: 'N. Sra. da Paz', bairro: 'Ipanema', x: 62, y: 88, lines: ['474', '483'] },
-  { id: 'STOP_606_03', nome: 'Praça Saens Peña', bairro: 'Tijuca', x: 28, y: 44, lines: ['606', '457'] },
-  { id: 'STOP_309_01', nome: 'Terminal Alvorada', bairro: 'Barra da Tijuca', x: 18, y: 84, lines: ['309', '315'] },
+  { id: 'STOP_474_01', nome: 'Central do Brasil', bairro: 'Centro', x: 48, y: 22, lines: ['474', '309', '315'] },
+  { id: 'STOP_474_02', nome: 'Praça da República', bairro: 'Centro', x: 42, y: 28, lines: ['474'] },
+  { id: 'STOP_474_03', nome: 'Candelária', bairro: 'Centro', x: 58, y: 18, lines: ['474'] },
+  { id: 'STOP_474_05', nome: 'Metrô Catete', bairro: 'Catete', x: 52, y: 40, lines: ['474'] },
+  { id: 'STOP_474_06', nome: 'Praia do Flamengo', bairro: 'Flamengo', x: 60, y: 48, lines: ['474'] },
+  { id: 'STOP_474_08', nome: 'Copacabana (Siqueira Campos)', bairro: 'Copacabana', x: 68, y: 62, lines: ['474', '483'] },
+  { id: 'STOP_474_09', nome: 'N. Sra. da Paz', bairro: 'Ipanema', x: 62, y: 72, lines: ['474', '483'] },
+  { id: 'STOP_606_03', nome: 'Praça Saens Peña', bairro: 'Tijuca', x: 28, y: 34, lines: ['606', '457'] },
+  { id: 'STOP_309_01', nome: 'Terminal Alvorada', bairro: 'Barra da Tijuca', x: 18, y: 68, lines: ['309', '315'] },
 ];
 
 const BUS_LINES_INFO: Record<string, { name: string; eta: string; speed: string; route: string }> = {
@@ -36,8 +36,8 @@ const BUS_LINES_INFO: Record<string, { name: string; eta: string; speed: string;
 
 const SCREEN_HEIGHT = Dimensions.get('window').height || 700;
 const SNAP_EXPANDED = SCREEN_HEIGHT * 0.82;
-const SNAP_HALF = SCREEN_HEIGHT * 0.50;
-const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.22;
+const SNAP_HALF = SCREEN_HEIGHT * 0.48;
+const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.18;
 
 export default function App() {
   const [selectedStopId, setSelectedStopId] = useState<string>('STOP_474_01');
@@ -56,16 +56,13 @@ export default function App() {
         sheetHeight.extractOffset();
       },
       onPanResponderMove: (_, gestureState) => {
-        // Inverte o dy para que arrastar para cima aumente a altura
         sheetHeight.setValue(-gestureState.dy);
       },
       onPanResponderRelease: (_, gestureState) => {
         sheetHeight.flattenOffset();
         
-        // Posição final após o arrasto
         const finalHeight = currentHeightRef.current - gestureState.dy;
 
-        // Identifica o Snap Point mais próximo
         let targetSnap = SNAP_HALF;
         if (finalHeight > (SNAP_HALF + SNAP_EXPANDED) / 2) {
           targetSnap = SNAP_EXPANDED;
@@ -75,13 +72,12 @@ export default function App() {
           targetSnap = SNAP_HALF;
         }
 
-        // Animação com física de mola (Spring Animation estilo Kole Jain)
         currentHeightRef.current = targetSnap;
         Animated.spring(sheetHeight, {
           toValue: targetSnap,
           useNativeDriver: false,
-          friction: 7,
-          tension: 45,
+          friction: 8,
+          tension: 50,
         }).start();
       },
     })
@@ -94,24 +90,24 @@ export default function App() {
     Animated.spring(sheetHeight, {
       toValue: height,
       useNativeDriver: false,
-      friction: 7,
-      tension: 45,
+      friction: 8,
+      tension: 50,
     }).start();
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: THEME.bg }]}>
+    <View style={styles.container}>
       <StatusBar style="light" />
 
       {/* ============================================================ */}
-      {/* 1. METADE SUPERIOR: MAPA INTERATIVO DO RIO DE JANEIRO       */}
+      {/* CAMADA 1 (FUNDO): MAPA EM TELA CHEIA FIXO (NUNCA REDIMENSIONA)*/}
       {/* ============================================================ */}
-      <View style={styles.mapContainer}>
-        {/* Fundo do Mapa com Grade Urbana */}
+      <View style={styles.fullscreenMap}>
+        {/* Grade e Traçados Espaciais do Rio de Janeiro */}
         <View style={styles.mapGrid}>
-          {/* Linhas de Trânsito Simuladas no Mapa */}
           <View style={styles.mapTransitPath1} />
           <View style={styles.mapTransitPath2} />
+          <View style={styles.mapTransitPath3} />
 
           {/* Marcadores dos Pontos de Ônibus no Mapa */}
           {RIO_STOPS.map((stop) => {
@@ -134,7 +130,7 @@ export default function App() {
                 <View
                   style={[
                     styles.mapPinInner,
-                    { backgroundColor: isSelected ? THEME.primary : '#3F3F46' },
+                    { backgroundColor: isSelected ? THEME.primary : '#27272A' },
                   ]}
                 >
                   <Text style={styles.mapPinIcon}>🚏</Text>
@@ -149,7 +145,7 @@ export default function App() {
           })}
 
           {/* Veículo em Tempo Real com Pulso */}
-          <View style={[styles.liveBusMarker, { left: '50%', top: '42%' }]}>
+          <View style={[styles.liveBusMarker, { left: '50%', top: '32%' }]}>
             <View style={styles.liveBusPulse} />
             <Text style={styles.liveBusIcon}>🚌</Text>
             <View style={styles.liveBusBadge}>
@@ -158,7 +154,7 @@ export default function App() {
           </View>
         </View>
 
-        {/* Header Flutuante sobre o Mapa */}
+        {/* Header Flutuante sobre o Mapa (Fixo no topo da Camada 1) */}
         <View style={styles.floatingHeader}>
           <View>
             <Text style={styles.appTitle}>Rio Bus Alert</Text>
@@ -172,11 +168,11 @@ export default function App() {
       </View>
 
       {/* ============================================================ */}
-      {/* 2. METADE INFERIOR: PAINEL DESLIZANTE GESTUAL (BOTTOM SHEET) */}
+      {/* CAMADA 2 (SOBREPOSIÇÃO): PAINEL DESLIZANTE QUE COBRE O MAPA  */}
       {/* ============================================================ */}
       <Animated.View
         style={[
-          styles.bottomSheet,
+          styles.bottomSheetOverlay,
           {
             height: sheetHeight,
             backgroundColor: THEME.card,
@@ -184,10 +180,10 @@ export default function App() {
           },
         ]}
       >
-        {/* Barra de Alça Arrastável com Gesto (Drag Handle) */}
+        {/* Barra de Alça de Arrasto (Drag Handle) */}
         <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
           <View style={styles.dragHandlePill} />
-          <Text style={styles.dragHintText}>Arraste para cima ou para baixo</Text>
+          <Text style={styles.dragHintText}>Arraste para cobrir ou revelar o mapa</Text>
         </View>
 
         {/* Conteúdo das Informações do Ponto Selecionado */}
@@ -212,7 +208,7 @@ export default function App() {
               onPress={() => setAlertActive(!alertActive)}
             >
               <Text style={styles.alertToggleText}>
-                {alertActive ? '🔔 Alerta Ativo (300m)' : '🔕 Ativar Alerta'}
+                {alertActive ? '🔔 Alerta Ativo (300m)' : '🔕 Ativar Alerta de Desembarque'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -260,13 +256,19 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#07090E',
+    position: 'relative',
   },
 
-  /* --- 1. Mapa Interativo (Metade Superior) --- */
-  mapContainer: {
-    flex: 1,
-    position: 'relative',
+  /* --- CAMADA 1: Mapa em Tela Cheia Fixo (100% de Altura e Largura) --- */
+  fullscreenMap: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: '#07090E',
+    zIndex: 1,
   },
   mapGrid: {
     flex: 1,
@@ -276,20 +278,29 @@ const styles = StyleSheet.create({
   mapTransitPath1: {
     position: 'absolute',
     left: '20%',
-    top: '30%',
+    top: '20%',
     width: '60%',
     height: 4,
-    backgroundColor: 'rgba(99, 102, 241, 0.3)',
+    backgroundColor: 'rgba(99, 102, 241, 0.35)',
     transform: [{ rotate: '45deg' }],
   },
   mapTransitPath2: {
     position: 'absolute',
     left: '10%',
-    top: '70%',
+    top: '55%',
     width: '80%',
     height: 4,
     backgroundColor: 'rgba(236, 72, 153, 0.25)',
     transform: [{ rotate: '-20deg' }],
+  },
+  mapTransitPath3: {
+    position: 'absolute',
+    left: '40%',
+    top: '40%',
+    width: '50%',
+    height: 3,
+    backgroundColor: 'rgba(16, 185, 129, 0.25)',
+    transform: [{ rotate: '80deg' }],
   },
   mapPin: {
     position: 'absolute',
@@ -367,12 +378,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(20, 20, 32, 0.85)',
+    backgroundColor: 'rgba(20, 20, 32, 0.90)',
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(99, 102, 241, 0.25)',
+    zIndex: 10,
   },
   appTitle: {
     fontSize: 17,
@@ -404,17 +416,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  /* --- 2. Painel Deslizante Gestual (Metade Inferior) --- */
-  bottomSheet: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+  /* --- CAMADA 2: Painel Deslizante em Sobreposição (Overlay) --- */
+  bottomSheetOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -6 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: -10 },
+    shadowOpacity: 0.7,
+    shadowRadius: 16,
+    zIndex: 100,
   },
   dragHandleZone: {
     alignItems: 'center',
@@ -441,7 +458,7 @@ const styles = StyleSheet.create({
   },
   sheetContent: {
     padding: 16,
-    paddingBottom: 30,
+    paddingBottom: 40,
   },
   stopInfoCard: {
     backgroundColor: '#1C1C2D',
