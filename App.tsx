@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { THEME } from './src/config/theme';
 
-// Linhas de Ônibus em Destaque no Estilo Transit App (Limpo, sem poluentes como km/h)
+// Linhas de Ônibus com Grid de Colunas Padronizado (Transit App)
 const NEARBY_TRANSIT_LINES = [
   {
     number: '474',
@@ -22,7 +22,7 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Copacabana & Lapa',
     eta: '2',
     unit: 'minutos',
-    bgColor: '#1D4ED8', // Azul Linha Principal
+    bgColor: '#1D4ED8', // Azul Forte
     textColor: '#FFFFFF',
   },
   {
@@ -30,7 +30,7 @@ const NEARBY_TRANSIT_LINES = [
     name: 'Rodoviária ➔ Eng. de Dentro',
     via: 'Via Tijuca & Maracanã',
     eta: '1',
-    unit: 'minuto',
+    unit: 'minutos',
     bgColor: '#059669', // Verde Esmeralda
     textColor: '#FFFFFF',
   },
@@ -40,7 +40,7 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Linha Vermelha & Túnel',
     eta: '5',
     unit: 'minutos',
-    bgColor: '#DC2626', // Coral / Vermelho
+    bgColor: '#DC2626', // Vermelho
     textColor: '#FFFFFF',
   },
   {
@@ -49,7 +49,7 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Botafogo & Barra',
     eta: '8',
     unit: 'minutos',
-    bgColor: '#EAB308', // Amarelo Transit App
+    bgColor: '#EAB308', // Amarelo Transit
     textColor: '#000000',
   },
   {
@@ -212,7 +212,7 @@ export default function App() {
       </View>
 
       {/* ============================================================ */}
-      {/* CAMADA 2: PAINEL TRANSIT APP COM BANNERS COLORIDOS LIMPOS    */}
+      {/* CAMADA 2: PAINEL TRANSIT APP COM GRADE ALINHADA EM COLUNAS   */}
       {/* ============================================================ */}
       <Animated.View
         style={[
@@ -258,7 +258,7 @@ export default function App() {
           </View>
         </View>
 
-        {/* 3. BANNERS DE ÔNIBUS DE ALTO IMPACTO (SEM POLUIÇÃO DE KM/H) */}
+        {/* 3. BANNERS DE ÔNIBUS COM ALINHAMENTO MATEMÁTICO EM COLUNA */}
         <ScrollView
           style={styles.bannersScroll}
           contentContainerStyle={styles.bannersScrollContent}
@@ -280,8 +280,8 @@ export default function App() {
                   setSelectedLineNumber(line.number);
                 }}
               >
-                {/* Lado Esquerdo: Número da Linha e Destino */}
-                <View style={styles.bannerLeft}>
+                {/* COLUNA ESQUERDA (ALINHADA À ESQUERDA) */}
+                <View style={styles.columnLeft}>
                   <Text style={[styles.bannerLineNumber, { color: line.textColor }]}>
                     {line.number}
                   </Text>
@@ -292,35 +292,30 @@ export default function App() {
                     {line.name}
                   </Text>
                   <Text
-                    style={[styles.bannerViaRoute, { color: line.textColor === '#FFFFFF' ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.65)' }]}
+                    style={[
+                      styles.bannerViaRoute,
+                      { color: line.textColor === '#FFFFFF' ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.65)' },
+                    ]}
                     numberOfLines={1}
                   >
                     {line.via}
                   </Text>
                 </View>
 
-                {/* Lado Direito: Tempo Estimado (ETA) com os Dois Traços de Transmissão */}
-                <View style={styles.bannerRight}>
-                  <View style={styles.etaNumberRow}>
+                {/* COLUNA DIREITA FIXA (ALINHAMENTO RETO VERTICAL EM COLUNA) */}
+                <View style={styles.columnRightFixed}>
+                  {/* Linha do Número + Dois Traços (Alinhados perfeitamente) */}
+                  <View style={styles.etaRowAligned}>
                     <Text style={[styles.bannerEtaNumber, { color: line.textColor }]}>
                       {line.eta}
                     </Text>
-                    {/* Os Dois Traços Característicos do Transit App */}
                     <View style={styles.twoArcsContainer}>
-                      <View
-                        style={[
-                          styles.arcSmall,
-                          { borderColor: line.textColor },
-                        ]}
-                      />
-                      <View
-                        style={[
-                          styles.arcLarge,
-                          { borderColor: line.textColor },
-                        ]}
-                      />
+                      <View style={[styles.arcSmall, { borderColor: line.textColor }]} />
+                      <View style={[styles.arcLarge, { borderColor: line.textColor }]} />
                     </View>
                   </View>
+
+                  {/* Linha do Texto 'minutos' (Alinhado exatamente na mesma margem direita) */}
                   <Text style={[styles.bannerEtaUnit, { color: line.textColor }]}>
                     {line.unit}
                   </Text>
@@ -575,7 +570,7 @@ const styles = StyleSheet.create({
   searchCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#059669', // Verde Cápsula do Transit App
+    backgroundColor: '#059669',
     borderRadius: 24,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -603,7 +598,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 
-  /* --- Lista de Banners de Ônibus (Limpos e Focados) --- */
+  /* --- Lista de Banners com Grid Rigorosamente Alinhado --- */
   bannersScroll: {
     flex: 1,
   },
@@ -614,8 +609,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 106, // Altura fixa e uniforme para todos os banners
     paddingHorizontal: 20,
-    paddingVertical: 18,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.15)',
   },
@@ -623,18 +618,21 @@ const styles = StyleSheet.create({
     borderLeftWidth: 6,
     borderLeftColor: '#FFFFFF',
   },
-  bannerLeft: {
+
+  /* --- COLUNA ESQUERDA (ALINHAMENTO RIGOROSO) --- */
+  columnLeft: {
     flex: 1,
-    paddingRight: 12,
+    justifyContent: 'center',
+    paddingRight: 16,
   },
   bannerLineNumber: {
-    fontSize: 42,
+    fontSize: 44,
     fontWeight: '900',
-    letterSpacing: -1,
-    lineHeight: 46,
+    letterSpacing: -1.5,
+    lineHeight: 48,
   },
   bannerDestination: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: 'bold',
     marginTop: 2,
   },
@@ -643,27 +641,31 @@ const styles = StyleSheet.create({
     marginTop: 1,
     fontWeight: '500',
   },
-  bannerRight: {
-    alignItems: 'flex-end',
+
+  /* --- COLUNA DIREITA FIXA (EIXO VERTICAL 100% RETO) --- */
+  columnRightFixed: {
+    width: 80, // Largura de coluna fixa garantindo alinhamento vertical reto
+    alignItems: 'flex-end', // Alinha tudo na mesma margem direita
     justifyContent: 'center',
   },
-  etaNumberRow: {
+  etaRowAligned: {
     flexDirection: 'row',
     alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    height: 48,
   },
   bannerEtaNumber: {
-    fontSize: 42,
+    fontSize: 44,
     fontWeight: '900',
-    letterSpacing: -1,
-    lineHeight: 46,
+    letterSpacing: -1.5,
+    lineHeight: 48,
+    textAlign: 'right',
   },
-
-  /* --- Os Dois Traços Característicos de Minutos / Sinal --- */
   twoArcsContainer: {
     width: 14,
     height: 20,
     marginLeft: 3,
-    marginTop: 4,
+    marginTop: 2,
     position: 'relative',
   },
   arcSmall: {
@@ -688,9 +690,11 @@ const styles = StyleSheet.create({
   },
   bannerEtaUnit: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: '700',
     textTransform: 'lowercase',
     marginTop: -2,
+    textAlign: 'right',
+    letterSpacing: 0.2,
   },
 
   /* --- Painel de Ação da Linha Selecionada --- */
