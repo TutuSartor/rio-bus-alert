@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
   TouchableOpacity,
   ScrollView,
   PanResponder,
@@ -35,19 +36,20 @@ const BUS_LINES_INFO: Record<string, { name: string; eta: string; speed: string;
 };
 
 const SCREEN_HEIGHT = Dimensions.get('window').height || 700;
-const SNAP_EXPANDED = SCREEN_HEIGHT * 0.82;
-const SNAP_HALF = SCREEN_HEIGHT * 0.48;
-const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.18;
+const SNAP_EXPANDED = SCREEN_HEIGHT * 0.85;
+const SNAP_HALF = SCREEN_HEIGHT * 0.50;
+const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.20;
 
 export default function App() {
   const [selectedStopId, setSelectedStopId] = useState<string>('STOP_474_01');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [alertActive, setAlertActive] = useState<boolean>(false);
+  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
 
   // Valor animado da altura do Bottom Sheet
   const sheetHeight = useRef(new Animated.Value(SNAP_HALF)).current;
   const currentHeightRef = useRef(SNAP_HALF);
 
-  // PanResponder para captura de gestos de arrasto com mouse ou dedo
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -85,6 +87,17 @@ export default function App() {
 
   const selectedStop = RIO_STOPS.find((s) => s.id === selectedStopId) || RIO_STOPS[0];
 
+  // Filtro de Pontos de Ônibus em Tempo Real pela Barra de Pesquisa
+  const filteredStops = RIO_STOPS.filter((stop) => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      stop.nome.toLowerCase().includes(query) ||
+      stop.bairro.toLowerCase().includes(query) ||
+      stop.lines.some((l) => l.includes(query))
+    );
+  });
+
   function snapTo(height: number) {
     currentHeightRef.current = height;
     Animated.spring(sheetHeight, {
@@ -95,21 +108,29 @@ export default function App() {
     }).start();
   }
 
+  function handleSelectStopFromSearch(stopId: string) {
+    setSelectedStopId(stopId);
+    setSearchQuery('');
+    // Se o painel estiver muito recolhido, expande para a metade
+    if (currentHeightRef.current === SNAP_COLLAPSED) {
+      snapTo(SNAP_HALF);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
 
       {/* ============================================================ */}
-      {/* CAMADA 1 (FUNDO): MAPA EM TELA CHEIA FIXO (NUNCA REDIMENSIONA)*/}
+      {/* CAMADA DO MAPA (FUNDO FIXO 100%)                             */}
       {/* ============================================================ */}
       <View style={styles.fullscreenMap}>
-        {/* Grade e Traçados Espaciais do Rio de Janeiro */}
         <View style={styles.mapGrid}>
           <View style={styles.mapTransitPath1} />
           <View style={styles.mapTransitPath2} />
           <View style={styles.mapTransitPath3} />
 
-          {/* Marcadores dos Pontos de Ônibus no Mapa */}
+          {/* Marcadores dos Pontos no Mapa */}
           {RIO_STOPS.map((stop) => {
             const isSelected = stop.id === selectedStopId;
             return (
@@ -144,7 +165,7 @@ export default function App() {
             );
           })}
 
-          {/* Veículo em Tempo Real com Pulso */}
+          {/* Veículo com Telemetria Ativa */}
           <View style={[styles.liveBusMarker, { left: '50%', top: '32%' }]}>
             <View style={styles.liveBusPulse} />
             <Text style={styles.liveBusIcon}>🚌</Text>
@@ -154,11 +175,11 @@ export default function App() {
           </View>
         </View>
 
-        {/* Header Flutuante sobre o Mapa (Fixo no topo da Camada 1) */}
+        {/* Header do App Flutuante no Topo da Tela */}
         <View style={styles.floatingHeader}>
           <View>
             <Text style={styles.appTitle}>Rio Bus Alert</Text>
-            <Text style={styles.appSubtitle}>Clique em um ponto no mapa</Text>
+            <Text style={styles.appSubtitle}>Mobilidade Urbana do Rio</Text>
           </View>
           <View style={styles.gpsLiveBadge}>
             <View style={styles.gpsDot} />
@@ -168,7 +189,7 @@ export default function App() {
       </View>
 
       {/* ============================================================ */}
-      {/* CAMADA 2 (SOBREPOSIÇÃO): PAINEL DESLIZANTE QUE COBRE O MAPA  */}
+      {/* PAINEL DE BUSCA (CAMADA DE SOBREPOSIÇÃO FLUTUANTE)           */}
       {/* ============================================================ */}
       <Animated.View
         style={[
@@ -180,72 +201,128 @@ export default function App() {
           },
         ]}
       >
-        {/* Barra de Alça de Arrasto Limpa e Minimalista (Sem textos desnecessários) */}
+        {/* 1. Alça de Arrasto */}
         <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
           <View style={styles.dragHandlePill} />
         </View>
 
-        {/* Conteúdo das Informações do Ponto Selecionado */}
+        {/* 2. BARRA DE PESQUISA PRIORITÁRIA (TOPO DO PAINEL) */}
+        <View style={styles.searchBarContainer}>
+          <View
+            style={[
+              styles.searchInputWrapper,
+              isSearchFocused && styles.searchInputWrapperFocused,
+            ]}
+          >
+            <Text style={styles.searchIcon}>🔍</Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Para onde você quer ir? (ex: Copacabana, 474...)"
+              placeholderTextColor={THEME.textMuted}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              onFocus={() => {
+                setIsSearchFocused(true);
+                // Quando o usuário foca na busca, expande o painel suavemente
+                if (currentHeightRef.current !== SNAP_EXPANDED) {
+                  snapTo(SNAP_EXPANDED);
+                }
+              }}
+              onBlur={() => setIsSearchFocused(false)}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearSearchBtn}>
+                <Text style={styles.clearSearchIcon}>✕</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+
+        {/* 3. CONTEÚDO DINÂMICO DO PAINEL */}
         <ScrollView
           style={styles.sheetScroll}
           contentContainerStyle={styles.sheetContent}
           showsVerticalScrollIndicator={false}
         >
-          {/* Cabeçalho do Ponto de Ônibus Selecionado */}
-          <View style={styles.stopInfoCard}>
+          {/* Se houver texto digitado na pesquisa: exibe resultados filtrados */}
+          {searchQuery.trim().length > 0 ? (
             <View>
-              <Text style={styles.stopNeighborhoodTag}>{selectedStop.bairro.toUpperCase()}</Text>
-              <Text style={styles.stopNameSelected}>{selectedStop.nome}</Text>
-            </View>
-
-            {/* Botão de Alerta de Desembarque */}
-            <TouchableOpacity
-              style={[
-                styles.alertToggleBtn,
-                alertActive ? styles.alertToggleBtnActive : styles.alertToggleBtnInactive,
-              ]}
-              onPress={() => setAlertActive(!alertActive)}
-            >
-              <Text style={styles.alertToggleText}>
-                {alertActive ? '🔔 Alerta Ativo (300m)' : '🔕 Ativar Alerta de Desembarque'}
+              <Text style={styles.sectionHeaderLabel}>
+                Resultados da Busca ({filteredStops.length}):
               </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Lista de Linhas que passam neste Ponto */}
-          <Text style={styles.linesSectionTitle}>
-            Linhas que passam neste ponto ({selectedStop.lines.length}):
-          </Text>
-
-          {selectedStop.lines.map((lineNum) => {
-            const lineData = BUS_LINES_INFO[lineNum] || {
-              name: 'Linha Municipal do Rio',
-              eta: '5 min',
-              speed: '25 km/h',
-              route: 'Itinerário Regular',
-            };
-
-            return (
-              <View key={lineNum} style={styles.busLineCard}>
-                {/* Badge com o Número da Linha */}
-                <View style={styles.lineBadge}>
-                  <Text style={styles.lineBadgeNumber}>{lineNum}</Text>
+              {filteredStops.map((stop) => (
+                <TouchableOpacity
+                  key={stop.id}
+                  style={styles.searchResultItem}
+                  onPress={() => handleSelectStopFromSearch(stop.id)}
+                >
+                  <View style={styles.searchResultPinIcon}>
+                    <Text style={{ fontSize: 16 }}>🚏</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.searchResultName}>{stop.nome}</Text>
+                    <Text style={styles.searchResultNeighborhood}>
+                      {stop.bairro} • Linhas: {stop.lines.join(', ')}
+                    </Text>
+                  </View>
+                  <Text style={styles.searchResultSelectArrow}>➔</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ) : (
+            <>
+              {/* CARTÃO DO PONTO SELECIONADO ATIVO */}
+              <View style={styles.stopInfoCard}>
+                <View>
+                  <Text style={styles.stopNeighborhoodTag}>{selectedStop.bairro.toUpperCase()}</Text>
+                  <Text style={styles.stopNameSelected}>{selectedStop.nome}</Text>
                 </View>
 
-                {/* Detalhes do Percurso */}
-                <View style={styles.lineDetails}>
-                  <Text style={styles.lineDestination}>{lineData.name}</Text>
-                  <Text style={styles.lineRouteDesc}>{lineData.route}</Text>
-                </View>
-
-                {/* Estimativa de Tempo (ETA) */}
-                <View style={styles.lineEtaContainer}>
-                  <Text style={styles.lineEtaTime}>{lineData.eta}</Text>
-                  <Text style={styles.lineSpeedText}>{lineData.speed}</Text>
-                </View>
+                {/* Botão de Alerta de Desembarque */}
+                <TouchableOpacity
+                  style={[
+                    styles.alertToggleBtn,
+                    alertActive ? styles.alertToggleBtnActive : styles.alertToggleBtnInactive,
+                  ]}
+                  onPress={() => setAlertActive(!alertActive)}
+                >
+                  <Text style={styles.alertToggleText}>
+                    {alertActive ? '🔔 Alerta Ativo (300m)' : '🔕 Ativar Alerta de Desembarque'}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            );
-          })}
+
+              {/* LISTA DE LINHAS QUE PASSAM NO PONTO */}
+              <Text style={styles.linesSectionTitle}>
+                Linhas que passam neste ponto ({selectedStop.lines.length}):
+              </Text>
+
+              {selectedStop.lines.map((lineNum) => {
+                const lineData = BUS_LINES_INFO[lineNum] || {
+                  name: 'Linha Municipal do Rio',
+                  eta: '5 min',
+                  speed: '25 km/h',
+                  route: 'Itinerário Regular',
+                };
+
+                return (
+                  <View key={lineNum} style={styles.busLineCard}>
+                    <View style={styles.lineBadge}>
+                      <Text style={styles.lineBadgeNumber}>{lineNum}</Text>
+                    </View>
+                    <View style={styles.lineDetails}>
+                      <Text style={styles.lineDestination}>{lineData.name}</Text>
+                      <Text style={styles.lineRouteDesc}>{lineData.route}</Text>
+                    </View>
+                    <View style={styles.lineEtaContainer}>
+                      <Text style={styles.lineEtaTime}>{lineData.eta}</Text>
+                      <Text style={styles.lineSpeedText}>{lineData.speed}</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </>
+          )}
         </ScrollView>
       </Animated.View>
     </View>
@@ -259,7 +336,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 
-  /* --- CAMADA 1: Mapa em Tela Cheia Fixo (100% de Altura e Largura) --- */
+  /* --- 1. Camada do Mapa --- */
   fullscreenMap: {
     position: 'absolute',
     top: 0,
@@ -415,7 +492,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  /* --- CAMADA 2: Painel Deslizante em Sobreposição (Overlay) --- */
+  /* --- 2. Painel de Busca --- */
   bottomSheetOverlay: {
     position: 'absolute',
     bottom: 0,
@@ -435,9 +512,7 @@ const styles = StyleSheet.create({
   dragHandleZone: {
     alignItems: 'center',
     paddingTop: 12,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
+    paddingBottom: 8,
     cursor: 'grab',
   },
   dragHandlePill: {
@@ -446,6 +521,52 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: '#71717A',
   },
+
+  /* --- Barra de Pesquisa --- */
+  searchBarContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
+  },
+  searchInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0A0A0F',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.3)',
+  },
+  searchInputWrapperFocused: {
+    borderColor: '#6366F1',
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+  },
+  searchIcon: {
+    fontSize: 14,
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
+    outlineStyle: 'none',
+  } as any,
+  clearSearchBtn: {
+    padding: 4,
+  },
+  clearSearchIcon: {
+    color: '#71717A',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
+  /* --- Conteúdo do Painel --- */
   sheetScroll: {
     flex: 1,
   },
@@ -453,6 +574,51 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 40,
   },
+  sectionHeaderLabel: {
+    color: '#A1A1AA',
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  searchResultItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1C1C2D',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  searchResultPinIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: '#312E81',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  searchResultName: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  searchResultNeighborhood: {
+    color: '#A1A1AA',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  searchResultSelectArrow: {
+    color: '#6366F1',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+
+  /* --- Cartão do Ponto --- */
   stopInfoCard: {
     backgroundColor: '#1C1C2D',
     padding: 14,
