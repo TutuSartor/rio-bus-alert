@@ -180,10 +180,9 @@ export default function App() {
           },
         ]}
       >
-        {/* Barra de Alça de Arrasto (Drag Handle) */}
+        {/* Barra de Alça de Arrasto Limpa e Minimalista (Sem textos desnecessários) */}
         <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
           <View style={styles.dragHandlePill} />
-          <Text style={styles.dragHintText}>Arraste para cobrir ou revelar o mapa</Text>
         </View>
 
         {/* Conteúdo das Informações do Ponto Selecionado */}
@@ -436,7 +435,7 @@ const styles = StyleSheet.create({
   dragHandleZone: {
     alignItems: 'center',
     paddingTop: 12,
-    paddingBottom: 8,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.06)',
     cursor: 'grab',
@@ -446,12 +445,6 @@ const styles = StyleSheet.create({
     height: 5,
     borderRadius: 3,
     backgroundColor: '#71717A',
-    marginBottom: 4,
-  },
-  dragHintText: {
-    fontSize: 10,
-    color: '#71717A',
-    fontWeight: '500',
   },
   sheetScroll: {
     flex: 1,
