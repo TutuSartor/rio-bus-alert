@@ -14,7 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { THEME } from './src/config/theme';
 
-// Linhas de Ônibus em Destaque no Estilo Transit App (Grandes Banners Coloridos)
+// Linhas de Ônibus em Destaque no Estilo Transit App (Limpo, sem poluentes como km/h)
 const NEARBY_TRANSIT_LINES = [
   {
     number: '474',
@@ -22,10 +22,8 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Copacabana & Lapa',
     eta: '2',
     unit: 'minutos',
-    bgColor: '#1D4ED8', // Azul Forte de Linha Principal
+    bgColor: '#1D4ED8', // Azul Linha Principal
     textColor: '#FFFFFF',
-    speed: '28 km/h',
-    isLive: true,
   },
   {
     number: '606',
@@ -35,8 +33,6 @@ const NEARBY_TRANSIT_LINES = [
     unit: 'minuto',
     bgColor: '#059669', // Verde Esmeralda
     textColor: '#FFFFFF',
-    speed: '24 km/h',
-    isLive: true,
   },
   {
     number: '483',
@@ -44,10 +40,8 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Linha Vermelha & Túnel',
     eta: '5',
     unit: 'minutos',
-    bgColor: '#DC2626', // Coral / Vermelho Alta Frequência
+    bgColor: '#DC2626', // Coral / Vermelho
     textColor: '#FFFFFF',
-    speed: '22 km/h',
-    isLive: true,
   },
   {
     number: '309',
@@ -55,10 +49,8 @@ const NEARBY_TRANSIT_LINES = [
     via: 'Via Botafogo & Barra',
     eta: '8',
     unit: 'minutos',
-    bgColor: '#D97706', // Âmbar / Dourado
+    bgColor: '#EAB308', // Amarelo Transit App
     textColor: '#000000',
-    speed: '34 km/h',
-    isLive: true,
   },
   {
     number: '457',
@@ -68,22 +60,20 @@ const NEARBY_TRANSIT_LINES = [
     unit: 'minutos',
     bgColor: '#7C3AED', // Roxo Violeta
     textColor: '#FFFFFF',
-    speed: '20 km/h',
-    isLive: true,
   },
 ];
 
 // Pontos Reais do Rio de Janeiro
 const RIO_STOPS = [
-  { id: 'STOP_474_01', nome: 'Central do Brasil', bairro: 'Centro', x: 48, y: 22, lines: ['474', '309', '315'] },
-  { id: 'STOP_474_02', nome: 'Praça da República', bairro: 'Centro', x: 42, y: 28, lines: ['474'] },
-  { id: 'STOP_474_03', nome: 'Candelária', bairro: 'Centro', x: 58, y: 18, lines: ['474'] },
-  { id: 'STOP_474_05', nome: 'Metrô Catete', bairro: 'Catete', x: 52, y: 40, lines: ['474'] },
-  { id: 'STOP_474_06', nome: 'Praia do Flamengo', bairro: 'Flamengo', x: 60, y: 48, lines: ['474'] },
-  { id: 'STOP_474_08', nome: 'Copacabana (Siqueira Campos)', bairro: 'Copacabana', x: 68, y: 62, lines: ['474', '483'] },
-  { id: 'STOP_474_09', nome: 'N. Sra. da Paz', bairro: 'Ipanema', x: 62, y: 72, lines: ['474', '483'] },
-  { id: 'STOP_606_03', nome: 'Praça Saens Peña', bairro: 'Tijuca', x: 28, y: 34, lines: ['606', '457'] },
-  { id: 'STOP_309_01', nome: 'Terminal Alvorada', bairro: 'Barra da Tijuca', x: 18, y: 68, lines: ['309', '315'] },
+  { id: 'STOP_474_01', nome: 'Central do Brasil', bairro: 'Centro', x: 48, y: 22 },
+  { id: 'STOP_474_02', nome: 'Praça da República', bairro: 'Centro', x: 42, y: 28 },
+  { id: 'STOP_474_03', nome: 'Candelária', bairro: 'Centro', x: 58, y: 18 },
+  { id: 'STOP_474_05', nome: 'Metrô Catete', bairro: 'Catete', x: 52, y: 40 },
+  { id: 'STOP_474_06', nome: 'Praia do Flamengo', bairro: 'Flamengo', x: 60, y: 48 },
+  { id: 'STOP_474_08', nome: 'Copacabana (Siqueira Campos)', bairro: 'Copacabana', x: 68, y: 62 },
+  { id: 'STOP_474_09', nome: 'N. Sra. da Paz', bairro: 'Ipanema', x: 62, y: 72 },
+  { id: 'STOP_606_03', nome: 'Praça Saens Peña', bairro: 'Tijuca', x: 28, y: 34 },
+  { id: 'STOP_309_01', nome: 'Terminal Alvorada', bairro: 'Barra da Tijuca', x: 18, y: 68 },
 ];
 
 const SCREEN_HEIGHT = Dimensions.get('window').height || 700;
@@ -148,7 +138,6 @@ export default function App() {
     }).start();
   }
 
-  // Filtragem de linhas e pontos pela busca
   const filteredLines = NEARBY_TRANSIT_LINES.filter((line) => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return true;
@@ -168,7 +157,7 @@ export default function App() {
       {/* ============================================================ */}
       <View style={styles.fullscreenMap}>
         <View style={styles.mapGrid}>
-          {/* Traçados das Linhas no Mapa */}
+          {/* Traçados Coloridos das Linhas */}
           <View style={styles.mapTransitPathBlue} />
           <View style={styles.mapTransitPathGreen} />
           <View style={styles.mapTransitPathRed} />
@@ -188,19 +177,19 @@ export default function App() {
             </TouchableOpacity>
           ))}
 
-          {/* Posição do Usuário no Mapa (Ponto Azul Pulsante) */}
+          {/* Posição do Usuário no Mapa (Blue Dot) */}
           <View style={[styles.userLocationMarker, { left: '50%', top: '34%' }]}>
             <View style={styles.userPulse} />
             <View style={styles.userDot} />
           </View>
 
-          {/* Ônibus em Tempo Real com Telemetria */}
+          {/* Ônibus em Tempo Real */}
           <View style={[styles.liveBusMarker, { left: '68%', top: '24%' }]}>
             <View style={styles.liveBusIconCircle}>
               <Ionicons name="bus" size={16} color="#FFFFFF" />
             </View>
             <View style={styles.liveBusBadge}>
-              <Text style={styles.liveBusBadgeText}>474 • 28 km/h</Text>
+              <Text style={styles.liveBusBadgeText}>Linha 474</Text>
             </View>
           </View>
         </View>
@@ -223,7 +212,7 @@ export default function App() {
       </View>
 
       {/* ============================================================ */}
-      {/* CAMADA 2: PAINEL TRANSIT APP COM BANNERS GIGANTES COLORIDOS  */}
+      {/* CAMADA 2: PAINEL TRANSIT APP COM BANNERS COLORIDOS LIMPOS    */}
       {/* ============================================================ */}
       <Animated.View
         style={[
@@ -233,7 +222,7 @@ export default function App() {
           },
         ]}
       >
-        {/* 1. Alça de Arrasto Discreta */}
+        {/* 1. Alça de Arrasto */}
         <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
           <View style={styles.dragHandlePill} />
         </View>
@@ -269,7 +258,7 @@ export default function App() {
           </View>
         </View>
 
-        {/* 3. BANNERS DE ÔNIBUS GIGANTES DE ALTO IMPACTO (TRANSIT APP HUD) */}
+        {/* 3. BANNERS DE ÔNIBUS DE ALTO IMPACTO (SEM POLUIÇÃO DE KM/H) */}
         <ScrollView
           style={styles.bannersScroll}
           contentContainerStyle={styles.bannersScrollContent}
@@ -291,7 +280,7 @@ export default function App() {
                   setSelectedLineNumber(line.number);
                 }}
               >
-                {/* Lado Esquerdo: Número Gigante da Linha e Destino */}
+                {/* Lado Esquerdo: Número da Linha e Destino */}
                 <View style={styles.bannerLeft}>
                   <Text style={[styles.bannerLineNumber, { color: line.textColor }]}>
                     {line.number}
@@ -310,24 +299,30 @@ export default function App() {
                   </Text>
                 </View>
 
-                {/* Lado Direito: Tempo Estimado Gigante (ETA) com Ícone de Transmissão */}
+                {/* Lado Direito: Tempo Estimado (ETA) com os Dois Traços de Transmissão */}
                 <View style={styles.bannerRight}>
                   <View style={styles.etaNumberRow}>
                     <Text style={[styles.bannerEtaNumber, { color: line.textColor }]}>
                       {line.eta}
                     </Text>
-                    <Ionicons
-                      name="wifi"
-                      size={18}
-                      color={line.textColor}
-                      style={styles.liveBroadcastIcon}
-                    />
+                    {/* Os Dois Traços Característicos do Transit App */}
+                    <View style={styles.twoArcsContainer}>
+                      <View
+                        style={[
+                          styles.arcSmall,
+                          { borderColor: line.textColor },
+                        ]}
+                      />
+                      <View
+                        style={[
+                          styles.arcLarge,
+                          { borderColor: line.textColor },
+                        ]}
+                      />
+                    </View>
                   </View>
                   <Text style={[styles.bannerEtaUnit, { color: line.textColor }]}>
                     {line.unit}
-                  </Text>
-                  <Text style={[styles.bannerSpeedText, { color: line.textColor === '#FFFFFF' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)' }]}>
-                    {line.speed}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -608,7 +603,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 
-  /* --- Lista de Banners Grandes de Ônibus --- */
+  /* --- Lista de Banners de Ônibus (Limpos e Focados) --- */
   bannersScroll: {
     flex: 1,
   },
@@ -662,21 +657,40 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     lineHeight: 46,
   },
-  liveBroadcastIcon: {
+
+  /* --- Os Dois Traços Característicos de Minutos / Sinal --- */
+  twoArcsContainer: {
+    width: 14,
+    height: 20,
     marginLeft: 3,
-    marginTop: 2,
-    transform: [{ rotate: '45deg' }],
+    marginTop: 4,
+    position: 'relative',
+  },
+  arcSmall: {
+    position: 'absolute',
+    top: 2,
+    left: 1,
+    width: 7,
+    height: 7,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderTopRightRadius: 6,
+  },
+  arcLarge: {
+    position: 'absolute',
+    top: -2,
+    left: 4,
+    width: 11,
+    height: 11,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderTopRightRadius: 9,
   },
   bannerEtaUnit: {
     fontSize: 12,
     fontWeight: 'bold',
     textTransform: 'lowercase',
     marginTop: -2,
-  },
-  bannerSpeedText: {
-    fontSize: 10,
-    fontWeight: '600',
-    marginTop: 2,
   },
 
   /* --- Painel de Ação da Linha Selecionada --- */
