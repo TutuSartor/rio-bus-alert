@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   ScrollView,
+  PanResponder,
+  Animated,
   Dimensions,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -32,26 +34,70 @@ const BUS_LINES_INFO: Record<string, { name: string; eta: string; speed: string;
   '457': { name: 'Abolição x Copacabana', eta: '9 min', speed: '20 km/h', route: 'Via Túnel Rebouças' },
 };
 
-type SnapPosition = 'collapsed' | 'half' | 'expanded';
+const SCREEN_HEIGHT = Dimensions.get('window').height || 700;
+const SNAP_EXPANDED = SCREEN_HEIGHT * 0.82;
+const SNAP_HALF = SCREEN_HEIGHT * 0.50;
+const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.22;
 
 export default function App() {
   const [selectedStopId, setSelectedStopId] = useState<string>('STOP_474_01');
-  const [sheetPosition, setSheetPosition] = useState<SnapPosition>('half');
   const [alertActive, setAlertActive] = useState<boolean>(false);
+
+  // Valor animado da altura do Bottom Sheet
+  const sheetHeight = useRef(new Animated.Value(SNAP_HALF)).current;
+  const currentHeightRef = useRef(SNAP_HALF);
+
+  // PanResponder para captura de gestos de arrasto com mouse ou dedo
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        sheetHeight.extractOffset();
+      },
+      onPanResponderMove: (_, gestureState) => {
+        // Inverte o dy para que arrastar para cima aumente a altura
+        sheetHeight.setValue(-gestureState.dy);
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        sheetHeight.flattenOffset();
+        
+        // Posição final após o arrasto
+        const finalHeight = currentHeightRef.current - gestureState.dy;
+
+        // Identifica o Snap Point mais próximo
+        let targetSnap = SNAP_HALF;
+        if (finalHeight > (SNAP_HALF + SNAP_EXPANDED) / 2) {
+          targetSnap = SNAP_EXPANDED;
+        } else if (finalHeight < (SNAP_COLLAPSED + SNAP_HALF) / 2) {
+          targetSnap = SNAP_COLLAPSED;
+        } else {
+          targetSnap = SNAP_HALF;
+        }
+
+        // Animação com física de mola (Spring Animation estilo Kole Jain)
+        currentHeightRef.current = targetSnap;
+        Animated.spring(sheetHeight, {
+          toValue: targetSnap,
+          useNativeDriver: false,
+          friction: 7,
+          tension: 45,
+        }).start();
+      },
+    })
+  ).current;
 
   const selectedStop = RIO_STOPS.find((s) => s.id === selectedStopId) || RIO_STOPS[0];
 
-  // Cálculo de altura dinâmica para o Snap da metade da tela
-  const getSheetHeight = () => {
-    switch (sheetPosition) {
-      case 'collapsed':
-        return '25%';
-      case 'half':
-        return '52%';
-      case 'expanded':
-        return '82%';
-    }
-  };
+  function snapTo(height: number) {
+    currentHeightRef.current = height;
+    Animated.spring(sheetHeight, {
+      toValue: height,
+      useNativeDriver: false,
+      friction: 7,
+      tension: 45,
+    }).start();
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: THEME.bg }]}>
@@ -80,7 +126,9 @@ export default function App() {
                 ]}
                 onPress={() => {
                   setSelectedStopId(stop.id);
-                  if (sheetPosition === 'collapsed') setSheetPosition('half');
+                  if (currentHeightRef.current === SNAP_COLLAPSED) {
+                    snapTo(SNAP_HALF);
+                  }
                 }}
               >
                 <View
@@ -124,51 +172,22 @@ export default function App() {
       </View>
 
       {/* ============================================================ */}
-      {/* 2. METADE INFERIOR: PAINEL DESLIZANTE COM SNAP (BOTTOM SHEET)*/}
+      {/* 2. METADE INFERIOR: PAINEL DESLIZANTE GESTUAL (BOTTOM SHEET) */}
       {/* ============================================================ */}
-      <View
+      <Animated.View
         style={[
           styles.bottomSheet,
           {
-            height: getSheetHeight(),
+            height: sheetHeight,
             backgroundColor: THEME.card,
             borderColor: THEME.border,
           },
         ]}
       >
-        {/* Barra de Alça e Controle de Snap (Puxador) */}
-        <View style={styles.dragHandleContainer}>
+        {/* Barra de Alça Arrastável com Gesto (Drag Handle) */}
+        <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
           <View style={styles.dragHandlePill} />
-          {/* Botões Rápidos de Snap (Recolhido / Metade 50% / Expandido) */}
-          <View style={styles.snapButtonsRow}>
-            <TouchableOpacity
-              style={[
-                styles.snapBtn,
-                sheetPosition === 'collapsed' && styles.snapBtnActive,
-              ]}
-              onPress={() => setSheetPosition('collapsed')}
-            >
-              <Text style={styles.snapBtnText}>Recolher</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.snapBtn,
-                sheetPosition === 'half' && styles.snapBtnActive,
-              ]}
-              onPress={() => setSheetPosition('half')}
-            >
-              <Text style={styles.snapBtnText}>Metade (50%)</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.snapBtn,
-                sheetPosition === 'expanded' && styles.snapBtnActive,
-              ]}
-              onPress={() => setSheetPosition('expanded')}
-            >
-              <Text style={styles.snapBtnText}>Expandir</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.dragHintText}>Arraste para cima ou para baixo</Text>
         </View>
 
         {/* Conteúdo das Informações do Ponto Selecionado */}
@@ -233,7 +252,7 @@ export default function App() {
             );
           })}
         </ScrollView>
-      </View>
+      </Animated.View>
     </View>
   );
 }
@@ -385,7 +404,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  /* --- 2. Painel Deslizante (Metade Inferior) --- */
+  /* --- 2. Painel Deslizante Gestual (Metade Inferior) --- */
   bottomSheet: {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -397,36 +416,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 10,
   },
-  dragHandleContainer: {
+  dragHandleZone: {
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingTop: 12,
+    paddingBottom: 8,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.06)',
+    cursor: 'grab',
   },
   dragHandlePill: {
-    width: 40,
+    width: 48,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#3F3F46',
-    marginBottom: 8,
+    backgroundColor: '#71717A',
+    marginBottom: 4,
   },
-  snapButtonsRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  snapBtn: {
-    backgroundColor: '#1C1C2D',
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 6,
-  },
-  snapBtnActive: {
-    backgroundColor: '#6366F1',
-  },
-  snapBtnText: {
-    color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '600',
+  dragHintText: {
+    fontSize: 10,
+    color: '#71717A',
+    fontWeight: '500',
   },
   sheetScroll: {
     flex: 1,
