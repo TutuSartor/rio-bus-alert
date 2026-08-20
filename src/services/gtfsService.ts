@@ -18,6 +18,11 @@ export interface BusStop {
   longitude: number;
   neighborhood?: string;
   distanceMeters?: number;
+  heading?: number;
+  lines?: string[];
+  isTerminal?: boolean;
+  platformCount?: number;
+  subStops?: any[];
 }
 
 export interface BusRoute {

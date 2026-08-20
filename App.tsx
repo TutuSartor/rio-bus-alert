@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,59 @@ import {
   PanResponder,
   Animated,
   Dimensions,
+  Platform,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
 import { THEME } from './src/config/theme';
 import { SPACING, COLUMNS, HEIGHTS, RADII } from './src/config/grid';
+import { TransitMap } from './src/components/Map/TransitMap';
+import { fetchLiveBusPositions } from './src/services/datarioApi';
+import { BusPosition, haversineDistance, isWithinGeofence, estimateArrivalTime } from './src/domain/geoUtils';
+import { BusStop } from './src/services/gtfsService';
+import busStopsData from './data/processed/rio_bus_stops.json';
+import * as Location from 'expo-location';
+import { getAutoDiscoveredLines, getNearbyStopsSorted } from './src/services/spatialEngine';
+import { SettingsModal, AlertSettings } from './src/components/Settings/SettingsModal';
+
+/**
+ * Função para capturar a localização REAL do usuário (Navegador Web / Celular)
+ */
+async function requestRealUserLocation(): Promise<{ latitude: number; longitude: number } | null> {
+  try {
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.geolocation) {
+      return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            resolve({
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+            });
+          },
+          (err) => {
+            console.warn('[GPS] Geolocalização do navegador não permitida ou indisponível:', err.message);
+            resolve(null);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
+        );
+      });
+    } else {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.High,
+        });
+        return {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+      }
+    }
+  } catch (error) {
+    console.warn('[GPS] Falha ao requisitar coordenadas reais:', error);
+  }
+  return null;
+}
 
 // Linhas de Ônibus com Grid de Colunas Padronizado (Transit App)
 const NEARBY_TRANSIT_LINES = [
@@ -64,33 +112,115 @@ const NEARBY_TRANSIT_LINES = [
   },
 ];
 
-// Pontos Reais do Rio de Janeiro
-const RIO_STOPS = [
-  { id: 'STOP_474_01', nome: 'Central do Brasil', bairro: 'Centro', x: 48, y: 22 },
-  { id: 'STOP_474_02', nome: 'Praça da República', bairro: 'Centro', x: 42, y: 28 },
-  { id: 'STOP_474_03', nome: 'Candelária', bairro: 'Centro', x: 58, y: 18 },
-  { id: 'STOP_474_05', nome: 'Metrô Catete', bairro: 'Catete', x: 52, y: 40 },
-  { id: 'STOP_474_06', nome: 'Praia do Flamengo', bairro: 'Flamengo', x: 60, y: 48 },
-  { id: 'STOP_474_08', nome: 'Copacabana', bairro: 'Copacabana', x: 68, y: 62 },
-  { id: 'STOP_474_09', nome: 'N. Sra. da Paz', bairro: 'Ipanema', x: 62, y: 72 },
-  { id: 'STOP_606_03', nome: 'Praça Saens Peña', bairro: 'Tijuca', x: 28, y: 34 },
-  { id: 'STOP_309_01', nome: 'Terminal Alvorada', bairro: 'Barra da Tijuca', x: 18, y: 68 },
-];
-
-const SCREEN_HEIGHT = Dimensions.get('window').height || 700;
-const SNAP_EXPANDED = SCREEN_HEIGHT * 0.88;
-const SNAP_HALF = SCREEN_HEIGHT * 0.54;
-const SNAP_COLLAPSED = SCREEN_HEIGHT * 0.22;
+const SCREEN_HEIGHT = Dimensions.get('window').height || 750;
+const SNAP_EXPANDED = Math.min(SCREEN_HEIGHT * 0.85, 620);
+const SNAP_HALF = Math.min(SCREEN_HEIGHT * 0.48, 380);
+const SNAP_COLLAPSED = 140;
 
 export default function App() {
-  const [selectedLineNumber, setSelectedLineNumber] = useState<string>('474');
+  const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
+  const [selectedLineNumber, setSelectedLineNumber] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [alertActive, setAlertActive] = useState<boolean>(false);
   const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
+  const [liveBuses, setLiveBuses] = useState<BusPosition[]>([]);
+  const [isLiveLoading, setIsLiveLoading] = useState<boolean>(false);
+  const [selectedStop, setSelectedStop] = useState<BusStop | null>(null);
+
+  // Localização inicial fixada na Rua Serenata, 193 - Ilha do Governador (Jardim Guanabara)
+  const [userLocation, setUserLocation] = useState({
+    latitude: -22.8122,
+    longitude: -43.2048,
+  });
+
+  const [recenterTrigger, setRecenterTrigger] = useState<number>(0);
+
+  // Meus Favoritos & Configurações de Alerta
+  const [favoriteStops, setFavoriteStops] = useState<BusStop[]>([]);
+  const [favoriteLines, setFavoriteLines] = useState<string[]>(['324']);
+  const [alertSettings, setAlertSettings] = useState<AlertSettings>({
+    radius: 300,
+    sound: true,
+    vibration: true,
+  });
+
+  const toggleFavoriteStop = (stop: BusStop) => {
+    setFavoriteStops((prev) => {
+      const exists = prev.some((s) => s.id === stop.id);
+      if (exists) {
+        return prev.filter((s) => s.id !== stop.id);
+      }
+      return [...prev, stop];
+    });
+  };
+
+  const toggleFavoriteLine = (lineNum: string) => {
+    setFavoriteLines((prev) => {
+      const exists = prev.includes(lineNum);
+      if (exists) {
+        return prev.filter((l) => l !== lineNum);
+      }
+      return [...prev, lineNum];
+    });
+  };
+
+  // Captura automática da localização REAL do usuário ao carregar o aplicativo
+  useEffect(() => {
+    requestRealUserLocation().then((coords) => {
+      if (coords) {
+        setUserLocation(coords);
+      }
+    });
+  }, []);
+
+  // Handler para recentralizar com atualização em tempo real do GPS
+  async function handleRecenter() {
+    const coords = await requestRealUserLocation();
+    if (coords) {
+      setUserLocation(coords);
+    }
+    setRecenterTrigger((prev) => prev + 1);
+  }
 
   const sheetHeight = useRef(new Animated.Value(SNAP_HALF)).current;
   const currentHeightRef = useRef(SNAP_HALF);
+  const linesScrollRef = useRef<ScrollView | null>(null);
 
+  // Quando o usuário seleciona um novo ponto, reseta o scroll da lista de linhas para o topo
+  useEffect(() => {
+    if (linesScrollRef.current) {
+      linesScrollRef.current.scrollTo({ y: 0, animated: true });
+    }
+  }, [selectedStop]);
+
+  // Polling em tempo real da telemetria da frota de ônibus (Data.rio API)
+  useEffect(() => {
+    let isSubscribed = true;
+
+    async function loadTelemetry() {
+      try {
+        setIsLiveLoading(true);
+        const positions = await fetchLiveBusPositions();
+        if (isSubscribed && positions && positions.length > 0) {
+          setLiveBuses(positions);
+        }
+      } catch (err) {
+        console.warn('Erro ao atualizar telemetria:', err);
+      } finally {
+        if (isSubscribed) setIsLiveLoading(false);
+      }
+    }
+
+    loadTelemetry();
+    const intervalId = setInterval(loadTelemetry, 7000); // Atualização periódica a cada 7s
+
+    return () => {
+      isSubscribed = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  // Gestos do Painel Deslizante
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -121,7 +251,14 @@ export default function App() {
     })
   ).current;
 
-  const selectedLine = NEARBY_TRANSIT_LINES.find((l) => l.number === selectedLineNumber) || NEARBY_TRANSIT_LINES[0];
+  // DESCOBERTA DE LINHAS QUE PASSAM NO PONTO CLICADO NO MAPA
+  const linesForClickedStop = useMemo(() => {
+    return getAutoDiscoveredLines(userLocation, liveBuses, searchQuery, selectedStop).lines;
+  }, [selectedStop, userLocation, liveBuses, searchQuery]);
+
+  const filteredLines = linesForClickedStop;
+
+  const selectedLine = filteredLines.find((l) => l.number === selectedLineNumber) || filteredLines[0] || NEARBY_TRANSIT_LINES[0];
 
   function snapTo(height: number) {
     currentHeightRef.current = height;
@@ -133,56 +270,65 @@ export default function App() {
     }).start();
   }
 
-  const filteredLines = NEARBY_TRANSIT_LINES.filter((line) => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return true;
-    return (
-      line.number.toLowerCase().includes(query) ||
-      line.name.toLowerCase().includes(query) ||
-      line.via.toLowerCase().includes(query)
+  // Cálculo da distância até o ponto de destino
+  const distanceToStop = useMemo(() => {
+    if (!selectedStop || !userLocation) return null;
+    return Math.round(
+      haversineDistance(userLocation, {
+        latitude: selectedStop.latitude,
+        longitude: selectedStop.longitude,
+      })
     );
-  });
+  }, [userLocation, selectedStop]);
+
+  // Ônibus da linha selecionada ativos no momento
+  const lineBusesCount = useMemo(() => {
+    return liveBuses.filter((b) => b.linha === selectedLineNumber).length;
+  }, [liveBuses, selectedLineNumber]);
+
+  // Estimativa estatística de chegada
+  const etaPrediction = useMemo(() => {
+    if (!distanceToStop) return { estimatedMinutes: 5, minMinutes: 3, maxMinutes: 7 };
+    return estimateArrivalTime(distanceToStop, 22);
+  }, [distanceToStop]);
+
+  const isNearGeofence = distanceToStop !== null && distanceToStop <= alertSettings.radius;
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
 
       {/* ============================================================ */}
-      {/* CAMADA 1: MAPA EM TELA CHEIA FIXO                            */}
+      {/* CAMADA 1: MAPA INTERATIVO REAL (CARTO DARK MATTER - R$ 0,00) */}
       {/* ============================================================ */}
       <View style={styles.fullscreenMap}>
-        <View style={styles.mapGrid}>
-          <View style={styles.mapTransitPathBlue} />
-          <View style={styles.mapTransitPathGreen} />
-          <View style={styles.mapTransitPathRed} />
+        <TransitMap
+          selectedLineNumber={selectedLineNumber}
+          selectedStop={selectedStop}
+          buses={liveBuses}
+          stops={busStopsData as BusStop[]}
+          userLocation={userLocation}
+          recenterTrigger={recenterTrigger}
+          onSelectStop={(stop) => {
+            setSelectedStop(stop);
+            // Se já tiver uma linha selecionada que não passa nesse ponto, limpa o filtro de linha
+            const stopLines = (stop as any).lines;
+            if (selectedLineNumber && stopLines && !stopLines.includes(selectedLineNumber)) {
+              setSelectedLineNumber(null);
+            }
+          }}
+          onDeselect={() => {
+            setSelectedStop(null);
+            setSelectedLineNumber(null);
+          }}
+        />
 
-          {RIO_STOPS.map((stop) => (
-            <TouchableOpacity
-              key={stop.id}
-              style={[styles.mapPin, { left: `${stop.x}%`, top: `${stop.y}%` }]}
-            >
-              <View style={styles.mapPinCircle}>
-                <MaterialCommunityIcons name="bus-stop" size={14} color="#FFFFFF" />
-              </View>
-            </TouchableOpacity>
-          ))}
-
-          <View style={[styles.userLocationMarker, { left: '50%', top: '34%' }]}>
-            <View style={styles.userPulse} />
-            <View style={styles.userDot} />
-          </View>
-
-          <View style={[styles.liveBusMarker, { left: '68%', top: '24%' }]}>
-            <View style={styles.liveBusIconCircle}>
-              <Ionicons name="bus" size={16} color="#FFFFFF" />
-            </View>
-            <View style={styles.liveBusBadge}>
-              <Text style={styles.liveBusBadgeText}>Linha 474</Text>
-            </View>
-          </View>
-        </View>
-
-        <TouchableOpacity style={styles.profileFloatingBtn}>
+        {/* CONTROLES FLUTUANTES SUPERIORES */}
+        <TouchableOpacity
+          style={styles.profileFloatingBtn}
+          activeOpacity={0.8}
+          onPress={() => setSettingsVisible(true)}
+        >
           <View style={styles.profileIconCircle}>
             <Ionicons name="person" size={18} color="#FFFFFF" />
           </View>
@@ -191,14 +337,41 @@ export default function App() {
           </View>
         </TouchableOpacity>
 
-        <View style={styles.gpsFloatingBadge}>
-          <View style={styles.gpsPulseDot} />
-          <Text style={styles.gpsFloatingText}>GPS AO VIVO</Text>
-        </View>
+        {/* BOTÃO REDONDO: RECENTRALIZAR NO USUÁRIO (MIRA) */}
+        <TouchableOpacity
+          style={styles.recenterFloatingBtn}
+          activeOpacity={0.8}
+          onPress={handleRecenter}
+        >
+          <View style={styles.recenterIconCircle}>
+            <Ionicons name="locate" size={20} color="#38BDF8" />
+          </View>
+        </TouchableOpacity>
+
+        {/* Alerta Visual de Geofence Ativo */}
+        {alertActive && selectedStop && (
+          <View style={[styles.activeAlertBanner, isNearGeofence && styles.activeAlertBannerTriggered]}>
+            <Ionicons
+              name={isNearGeofence ? 'alert-circle' : 'notifications'}
+              size={18}
+              color={isNearGeofence ? '#EF4444' : '#38BDF8'}
+            />
+            <View style={{ flex: 1, marginLeft: 8 }}>
+              <Text style={styles.activeAlertTitle}>
+                {isNearGeofence ? '🚨 DESEMBARQUE PRÓXIMO!' : `Alerta: ${selectedStop.name}`}
+              </Text>
+              <Text style={styles.activeAlertSubtitle}>
+                {isNearGeofence
+                  ? `Você está a ${distanceToStop}m do seu ponto de descida!`
+                  : `Avisaremos automaticamente a ${alertSettings.radius}m do ponto`}
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* ============================================================ */}
-      {/* CAMADA 2: PAINEL COM GRADE RIGOROSA DE COLUNAS               */}
+      {/* CAMADA 2: PAINEL DESLIZANTE COM GRADE RIGOROSA (TRANSIT APP) */}
       {/* ============================================================ */}
       <Animated.View
         style={[
@@ -206,9 +379,27 @@ export default function App() {
           { height: sheetHeight },
         ]}
       >
-        {/* Alça de Arrasto */}
-        <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
-          <View style={styles.dragHandlePill} />
+        {/* Alça de Arrasto com Áreas Laterais de Deseleção */}
+        <View style={styles.dragHandleZoneWrapper}>
+          <TouchableOpacity
+            style={styles.sheetSideDeselectArea}
+            activeOpacity={0.7}
+            onPress={() => {
+              setSelectedLineNumber(null);
+              setSelectedStop(null);
+            }}
+          />
+          <View {...panResponder.panHandlers} style={styles.dragHandleZone}>
+            <View style={styles.dragHandlePill} />
+          </View>
+          <TouchableOpacity
+            style={styles.sheetSideDeselectArea}
+            activeOpacity={0.7}
+            onPress={() => {
+              setSelectedLineNumber(null);
+              setSelectedStop(null);
+            }}
+          />
         </View>
 
         {/* BARRA DE PESQUISA EM CÁPSULA */}
@@ -222,16 +413,11 @@ export default function App() {
             <Feather name="search" size={20} color="#FFFFFF" style={{ marginRight: SPACING.sm }} />
             <TextInput
               style={styles.searchCapsuleInput}
-              placeholder="Para onde você quer ir?"
-              placeholderTextColor="rgba(255, 255, 255, 0.7)"
+              placeholder="Para onde você vai hoje?"
+              placeholderTextColor="#949BA4"
               value={searchQuery}
               onChangeText={setSearchQuery}
-              onFocus={() => {
-                setIsSearchFocused(true);
-                if (currentHeightRef.current !== SNAP_EXPANDED) {
-                  snapTo(SNAP_EXPANDED);
-                }
-              }}
+              onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
             />
             {searchQuery.length > 0 && (
@@ -242,8 +428,54 @@ export default function App() {
           </View>
         </View>
 
-        {/* LISTA DE BANNERS COM GRADE DE COLUNAS RIGOROSA */}
+        {/* INDICADOR DO PONTO CLICADO OU MODO EXPLORAÇÃO (TOCÁVEL PARA DESELECIONAR) */}
+        <TouchableOpacity
+          activeOpacity={selectedStop ? 0.7 : 1}
+          style={styles.nearestStopBadgeRow}
+          onPress={() => {
+            if (selectedStop) {
+              setSelectedStop(null);
+              setSelectedLineNumber(null);
+            }
+          }}
+        >
+          <MaterialCommunityIcons
+            name={selectedStop ? 'bus-stop' : 'map-search-outline'}
+            size={15}
+            color="#38BDF8"
+          />
+          <Text style={styles.nearestStopBadgeText} numberOfLines={1}>
+            {selectedStop ? (
+              <>
+                Linhas no ponto: <Text style={{ fontWeight: 'bold', color: '#F2F3F5' }}>{selectedStop.name}</Text> ({distanceToStop || 0}m de você)
+              </>
+            ) : (
+              'Linhas próximas da sua região (Toque em um ponto no mapa):'
+            )}
+          </Text>
+          {selectedStop && (
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 'auto' }}>
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation();
+                  toggleFavoriteStop(selectedStop);
+                }}
+                style={{ paddingHorizontal: 6 }}
+              >
+                <Ionicons
+                  name={favoriteStops.some((s) => s.id === selectedStop.id) ? 'star' : 'star-outline'}
+                  size={16}
+                  color={favoriteStops.some((s) => s.id === selectedStop.id) ? '#F59E0B' : '#949BA4'}
+                />
+              </TouchableOpacity>
+              <Feather name="x" size={14} color="#949BA4" style={{ marginLeft: 4 }} />
+            </View>
+          )}
+        </TouchableOpacity>
+
+        {/* BANNERS DAS LINHAS QUE PASSAM NO PONTO CLICADO */}
         <ScrollView
+          ref={linesScrollRef}
           style={styles.bannersScroll}
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
@@ -261,7 +493,14 @@ export default function App() {
                   { backgroundColor: line.bgColor },
                   isSelected && styles.transitBannerSelected,
                 ]}
-                onPress={() => setSelectedLineNumber(line.number)}
+                onPress={() => {
+                  // FORMA 1: Se clicar de novo no botão selecionado, deseleciona e não seleciona nada
+                  if (selectedLineNumber === line.number) {
+                    setSelectedLineNumber(null);
+                  } else {
+                    setSelectedLineNumber(line.number);
+                  }
+                }}
               >
                 {/* COLUNA ESQUERDA: Número da Linha + Destino */}
                 <View style={styles.colLeft}>
@@ -281,7 +520,6 @@ export default function App() {
                   <Text style={[styles.etaNumber, { color: line.textColor }]}>
                     {line.eta}
                   </Text>
-                  {/* Dois arcos posicionados no canto superior direito do número */}
                   <View style={styles.arcsOverlay}>
                     <View style={[styles.arcS, { borderColor: line.textColor }]} />
                     <View style={[styles.arcL, { borderColor: line.textColor }]} />
@@ -294,36 +532,87 @@ export default function App() {
             );
           })}
 
-          {/* PAINEL DE AÇÃO */}
-          <View style={styles.actionCard}>
-            <View style={styles.actionHeader}>
-              <View>
-                <Text style={styles.actionTitle}>Linha {selectedLine.number} em Monitoramento</Text>
-                <Text style={styles.actionSubtitle}>{selectedLine.name}</Text>
+          {/* PAINEL DE AÇÃO E TELEMETRIA DA LINHA SELECIONADA */}
+          {selectedLine && (
+            <View style={styles.actionCard}>
+              <View style={styles.actionHeader}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.actionTitle}>Linha {selectedLine.number} em Monitoramento</Text>
+                  <Text style={styles.actionSubtitle}>{selectedLine.name}</Text>
+                  <View style={styles.telemetryMiniRow}>
+                    <MaterialCommunityIcons name="bus-marker" size={14} color="#38BDF8" />
+                    <Text style={styles.telemetryMiniText}>
+                      {lineBusesCount > 0 ? `${lineBusesCount} ônibus ativos com GPS no mapa` : 'Frota sincronizando GPS'}
+                    </Text>
+                  </View>
+                </View>
+                <View style={[styles.colorIndicator, { backgroundColor: selectedLine.bgColor }]} />
               </View>
-              <View style={[styles.colorIndicator, { backgroundColor: selectedLine.bgColor }]} />
-            </View>
 
-            <TouchableOpacity
-              style={[
-                styles.alertActionButton,
-                alertActive ? styles.alertBtnActive : styles.alertBtnInactive,
-              ]}
-              onPress={() => setAlertActive(!alertActive)}
-            >
-              <Ionicons
-                name={alertActive ? 'notifications' : 'notifications-outline'}
-                size={18}
-                color="#FFFFFF"
-                style={{ marginRight: SPACING.sm }}
-              />
-              <Text style={styles.alertActionText}>
-                {alertActive ? 'Alerta Ativo (Notificar a 300m)' : 'Ativar Alerta de Desembarque'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+              {/* Ponto de Desembarque Selecionado */}
+              <View style={styles.stopInfoBox}>
+                <MaterialCommunityIcons name="map-marker-radius" size={18} color="#38BDF8" />
+                <View style={{ flex: 1, marginLeft: 8 }}>
+                  <Text style={styles.stopInfoLabel}>Destino / Ponto de Desembarque:</Text>
+                  <Text style={styles.stopInfoName} numberOfLines={1}>
+                    {selectedStop ? `${selectedStop.name} (${selectedStop.neighborhood || 'RJ'})` : 'Toque em uma parada no mapa'}
+                  </Text>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={[
+                  styles.alertActionButton,
+                  alertActive ? styles.alertBtnActive : styles.alertBtnInactive,
+                ]}
+                activeOpacity={0.85}
+                onPress={() => setAlertActive(!alertActive)}
+              >
+                <Ionicons
+                  name={alertActive ? 'notifications-off' : 'notifications'}
+                  size={18}
+                  color="#FFFFFF"
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={styles.alertActionText}>
+                  {alertActive
+                    ? 'Cancelar Alerta de Desembarque'
+                    : `Ativar Alerta ao Aproximar (${alertSettings.radius}m)`}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </ScrollView>
       </Animated.View>
+
+      {/* MODAL DE PERFIL, CONFIGURAÇÕES E FEEDBACK DA COMUNIDADE */}
+      <SettingsModal
+        visible={settingsVisible}
+        onClose={() => setSettingsVisible(false)}
+        selectedStop={selectedStop}
+        selectedLineNumber={selectedLineNumber}
+        userCoords={userLocation}
+        favoriteStops={favoriteStops}
+        favoriteLines={favoriteLines}
+        onSelectFavoriteStop={(stop) => {
+          setSelectedStop(stop);
+          const stopLines = (stop as any).lines;
+          if (selectedLineNumber && stopLines && !stopLines.includes(selectedLineNumber)) {
+            setSelectedLineNumber(null);
+          }
+        }}
+        onSelectFavoriteLine={(lineNum) => {
+          setSelectedLineNumber(lineNum);
+        }}
+        onRemoveFavoriteStop={(stopId) => {
+          setFavoriteStops((prev) => prev.filter((s) => s.id !== stopId));
+        }}
+        onRemoveFavoriteLine={(lineNum) => {
+          setFavoriteLines((prev) => prev.filter((l) => l !== lineNum));
+        }}
+        alertSettings={alertSettings}
+        onChangeAlertSettings={setAlertSettings}
+      />
     </View>
   );
 }
@@ -331,8 +620,9 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#07090E',
+    backgroundColor: '#1E1F22',
     position: 'relative',
+    overflow: 'hidden',
   },
 
   /* ============================== */
@@ -340,103 +630,137 @@ const styles = StyleSheet.create({
   /* ============================== */
   fullscreenMap: {
     position: 'absolute',
-    top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: '#07090E',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#1E1F22',
     zIndex: 1,
   },
-  mapGrid: {
-    flex: 1,
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  mapTransitPathBlue: {
-    position: 'absolute', left: '15%', top: '25%', width: '70%', height: 6,
-    backgroundColor: '#1D4ED8', borderRadius: 3, transform: [{ rotate: '35deg' }],
-  },
-  mapTransitPathGreen: {
-    position: 'absolute', left: '5%', top: '60%', width: '85%', height: 6,
-    backgroundColor: '#059669', borderRadius: 3, transform: [{ rotate: '-25deg' }],
-  },
-  mapTransitPathRed: {
-    position: 'absolute', left: '35%', top: '40%', width: '60%', height: 5,
-    backgroundColor: '#DC2626', borderRadius: 3, transform: [{ rotate: '80deg' }],
-  },
-  mapPin: {
+  profileFloatingBtn: {
     position: 'absolute',
-    alignItems: 'center',
-    transform: [{ translateX: -12 }, { translateY: -12 }],
+    top: 24,
+    left: SPACING.base,
+    zIndex: 10,
   },
-  mapPinCircle: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: '#1E293B', borderWidth: 2, borderColor: '#38BDF8',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  userLocationMarker: {
-    position: 'absolute', alignItems: 'center', justifyContent: 'center', zIndex: 95,
-  },
-  userPulse: {
-    position: 'absolute', width: 38, height: 38, borderRadius: 19,
-    backgroundColor: 'rgba(56, 189, 248, 0.35)',
-  },
-  userDot: {
-    width: 14, height: 14, borderRadius: 7,
-    backgroundColor: '#0284C7', borderWidth: 3, borderColor: '#FFFFFF',
-  },
-  liveBusMarker: {
-    position: 'absolute', alignItems: 'center', zIndex: 90,
-  },
-  liveBusIconCircle: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: '#1D4ED8', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 2, borderColor: '#FFFFFF',
-  },
-  liveBusBadge: {
-    backgroundColor: '#0F172A', paddingVertical: 2, paddingHorizontal: 6,
-    borderRadius: 4, marginTop: 3, borderWidth: 1, borderColor: '#38BDF8',
-  },
-  liveBusBadgeText: { color: '#FFFFFF', fontSize: 9, fontWeight: 'bold' },
-  profileFloatingBtn: { position: 'absolute', top: 50, left: SPACING.base, zIndex: 10 },
   profileIconCircle: {
-    width: 44, height: 44, borderRadius: 22,
-    backgroundColor: '#312E81', borderWidth: 2, borderColor: '#6366F1',
-    alignItems: 'center', justifyContent: 'center',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#2B2D31',
+    borderWidth: 2,
+    borderColor: '#38BDF8',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
   },
   gearBadge: {
-    position: 'absolute', bottom: -2, right: -2, width: 18, height: 18, borderRadius: 9,
-    backgroundColor: '#F8FAFC', alignItems: 'center', justifyContent: 'center',
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#F2F3F5',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  gpsFloatingBadge: {
-    position: 'absolute', top: 54, right: SPACING.base,
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: 'rgba(15, 23, 42, 0.90)',
-    paddingVertical: 6, paddingHorizontal: 10, borderRadius: 20,
-    borderWidth: 1, borderColor: 'rgba(16, 185, 129, 0.4)', gap: 6, zIndex: 10,
+  recenterFloatingBtn: {
+    position: 'absolute',
+    top: 24,
+    right: SPACING.base,
+    zIndex: 10,
   },
-  gpsPulseDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#10B981' },
-  gpsFloatingText: { color: '#34D399', fontSize: 10, fontWeight: 'bold', letterSpacing: 0.5 },
+  recenterIconCircle: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: '#2B2D31',
+    borderWidth: 2,
+    borderColor: '#38BDF8',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+  },
+  activeAlertBanner: {
+    position: 'absolute',
+    top: 80,
+    left: SPACING.base,
+    right: SPACING.base,
+    backgroundColor: 'rgba(43, 45, 49, 0.96)',
+    borderWidth: 1.5,
+    borderColor: '#38BDF8',
+    borderRadius: RADII.card,
+    padding: SPACING.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 10,
+    shadowColor: '#38BDF8',
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+  },
+  activeAlertBannerTriggered: {
+    borderColor: '#ED4245',
+    backgroundColor: 'rgba(237, 66, 69, 0.25)',
+  },
+  activeAlertTitle: {
+    color: '#F2F3F5',
+    fontSize: 13,
+    fontWeight: 'bold',
+  },
+  activeAlertSubtitle: {
+    color: '#949BA4',
+    fontSize: 11,
+    marginTop: 2,
+  },
 
   /* ============================== */
-  /* 2. Painel de Busca             */
+  /* 2. Painel de Busca & Banners   */
   /* ============================== */
   bottomSheetOverlay: {
-    position: 'absolute', bottom: 0, left: 0, right: 0,
-    backgroundColor: '#0A0A0F',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#2B2D31',
     borderTopLeftRadius: RADII.sheet,
     borderTopRightRadius: RADII.sheet,
-    borderTopWidth: 1, borderLeftWidth: 1, borderRightWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    shadowColor: '#000', shadowOffset: { width: 0, height: -12 },
-    shadowOpacity: 0.8, shadowRadius: 20,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
     zIndex: 100,
+  },
+  dragHandleZoneWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: HEIGHTS.dragHandle,
+    paddingHorizontal: 8,
+  },
+  sheetSideDeselectArea: {
+    flex: 1,
+    height: HEIGHTS.dragHandle,
   },
   dragHandleZone: {
     alignItems: 'center',
     height: HEIGHTS.dragHandle,
     justifyContent: 'center',
-    cursor: 'grab',
+    width: 90,
   },
   dragHandlePill: {
-    width: 44, height: 5, borderRadius: 3, backgroundColor: '#52525B',
+    width: 44,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: '#4E5058',
   },
 
   /* --- Barra de Pesquisa --- */
@@ -444,135 +768,175 @@ const styles = StyleSheet.create({
     paddingHorizontal: COLUMNS.gutter,
     paddingBottom: SPACING.sm,
   },
-  searchCapsule: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#059669',
-    borderRadius: RADII.pill,
-    paddingHorizontal: SPACING.base,
-    height: HEIGHTS.searchCapsule,
-    shadowColor: '#059669', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.4, shadowRadius: 8,
-  },
-  searchCapsuleFocused: {
-    backgroundColor: '#047857', borderWidth: 2, borderColor: '#34D399',
-  },
-  searchCapsuleInput: {
-    flex: 1, color: '#FFFFFF', fontSize: 16, fontWeight: '600',
-    outlineStyle: 'none',
-  } as any,
-
-  /* =========================================================== */
-  /* BANNERS DE ÔNIBUS: GRADE RIGOROSA DE 2 COLUNAS             */
-  /*                                                             */
-  /*  |<--- colLeft (flex:1) --->|<--- colRight (88px fixo) --->|*/
-  /*  |  474                     |                           2'' |*/
-  /*  |  Jacaré ➔ Jardim...      |                          min |*/
-  /*  |  Via Copacabana...       |                              |*/
-  /*  |__________________________|______________________________|*/
-  /*                                                             */
-  /* A colRight tem largura fixa. Todos os números de ETA, os   */
-  /* arcos e a legenda "min" seguem exatamente o mesmo eixo      */
-  /* vertical de cima a baixo, independente de 1 ou 2 dígitos.   */
-  /* =========================================================== */
-  bannersScroll: { flex: 1 },
-
-  transitBanner: {
+  nearestStopBadgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: HEIGHTS.transitBanner,
-    paddingLeft: SPACING.lg,
-    paddingRight: SPACING.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.15)',
+    paddingHorizontal: COLUMNS.gutter,
+    marginBottom: SPACING.xs,
+    gap: 6,
   },
-  transitBannerSelected: {
-    borderLeftWidth: 6,
-    borderLeftColor: '#FFFFFF',
-    paddingLeft: SPACING.lg - 6, // Compensa a borda para manter o conteúdo alinhado
+  nearestStopBadgeText: {
+    color: '#949BA4',
+    fontSize: 11,
+    fontWeight: '500',
+  },
+  searchCapsule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E1F22',
+    borderRadius: RADII.pill,
+    height: HEIGHTS.searchCapsule,
+    paddingHorizontal: SPACING.base,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.18)',
+  },
+  searchCapsuleFocused: {
+    borderColor: 'rgba(255, 255, 255, 0.65)',
+    backgroundColor: '#18191C',
+  },
+  searchCapsuleInput: {
+    flex: 1,
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '500',
   },
 
-  /* Coluna Esquerda: ocupa todo o espaço restante */
+  /* --- Cartões dos Pontos Próximos --- */
+  stopItemCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#313338',
+    borderRadius: RADII.card,
+    padding: SPACING.md,
+    marginBottom: SPACING.sm,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  stopItemCardSelected: {
+    borderColor: '#38BDF8',
+    backgroundColor: '#383A40',
+  },
+  stopIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#1E1F22',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  stopCardTitle: {
+    color: '#F2F3F5',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  stopCardSubtitle: {
+    color: '#949BA4',
+    fontSize: 11,
+    marginTop: 2,
+  },
+  distanceBadgeContainer: {
+    backgroundColor: '#1E1F22',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.3)',
+  },
+  distanceBadgeText: {
+    color: '#38BDF8',
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
+  bannersScroll: {
+    paddingHorizontal: COLUMNS.gutter,
+    paddingTop: SPACING.xs,
+  },
+  transitBanner: {
+    flexDirection: 'row',
+    height: HEIGHTS.transitBanner,
+    borderRadius: RADII.card,
+    marginBottom: SPACING.sm,
+    paddingHorizontal: SPACING.base,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  transitBannerSelected: {
+    borderColor: '#FFFFFF',
+    transform: [{ scale: 1.01 }],
+  },
   colLeft: {
     flex: 1,
     justifyContent: 'center',
-    paddingRight: SPACING.base,
+    paddingRight: SPACING.md,
   },
   lineNumberText: {
-    fontSize: 44,
+    fontSize: 22,
     fontWeight: '900',
-    letterSpacing: -1.5,
-    lineHeight: 48,
+    letterSpacing: -0.5,
   },
   destinationText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginTop: 2,
+    fontSize: 13,
+    fontWeight: '700',
+    marginTop: 1,
   },
   viaText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '500',
     marginTop: 1,
   },
-
-  /* Coluna Direita: largura fixa de 88px, eixo central vertical */
   colRight: {
-    width: COLUMNS.etaColumn,
+    width: 68,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
   etaNumber: {
-    fontSize: 44,
+    fontSize: 26,
     fontWeight: '900',
-    letterSpacing: -1.5,
-    lineHeight: 48,
-    textAlign: 'center',
-    width: '100%',
+    lineHeight: 28,
   },
-  /* Os dois arcos ficam posicionados absolutamente no canto superior direito */
   arcsOverlay: {
     position: 'absolute',
-    top: 0,
-    right: -2,
-    width: 16,
-    height: 16,
+    top: -2,
+    right: 6,
   },
   arcS: {
-    position: 'absolute',
-    top: 4,
-    right: 2,
-    width: 6,
-    height: 6,
-    borderTopWidth: 2.5,
-    borderRightWidth: 2.5,
-    borderTopRightRadius: 5,
+    width: 8,
+    height: 8,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderRadius: 4,
+    marginBottom: 1,
   },
   arcL: {
-    position: 'absolute',
-    top: 0,
-    right: -1,
-    width: 11,
-    height: 11,
-    borderTopWidth: 2.5,
-    borderRightWidth: 2.5,
-    borderTopRightRadius: 9,
+    width: 14,
+    height: 14,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderRadius: 7,
+    marginTop: -4,
   },
   etaUnitText: {
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: '700',
-    textAlign: 'center',
-    width: '100%',
-    marginTop: -2,
+    marginTop: 1,
   },
 
-  /* --- Painel de Ação --- */
+  /* --- Cartão de Ação e Telemetria --- */
   actionCard: {
-    margin: COLUMNS.gutter,
-    padding: SPACING.base,
+    backgroundColor: '#313338',
     borderRadius: RADII.card,
-    backgroundColor: '#141420',
+    padding: SPACING.base,
+    marginTop: SPACING.sm,
     borderWidth: 1,
-    borderColor: 'rgba(99, 102, 241, 0.25)',
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   actionHeader: {
     flexDirection: 'row',
@@ -580,14 +944,79 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: SPACING.md,
   },
-  actionTitle: { color: '#FFFFFF', fontSize: 15, fontWeight: 'bold' },
-  actionSubtitle: { color: '#A1A1AA', fontSize: 12, marginTop: 2 },
-  colorIndicator: { width: 14, height: 14, borderRadius: 7 },
-  alertActionButton: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    paddingVertical: SPACING.md, borderRadius: RADII.badge,
+  actionTitle: {
+    color: '#F2F3F5',
+    fontSize: 14,
+    fontWeight: '700',
   },
-  alertBtnInactive: { backgroundColor: '#312E81', borderWidth: 1, borderColor: '#6366F1' },
-  alertBtnActive: { backgroundColor: '#BE185D', borderWidth: 1, borderColor: '#EC4899' },
-  alertActionText: { color: '#FFFFFF', fontSize: 14, fontWeight: 'bold' },
+  actionSubtitle: {
+    color: '#949BA4',
+    fontSize: 12,
+    marginTop: 2,
+  },
+  telemetryMiniRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
+  telemetryMiniText: {
+    color: '#38BDF8',
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  colorIndicator: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  stopInfoBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E1F22',
+    padding: SPACING.md,
+    borderRadius: RADII.card,
+    marginBottom: SPACING.md,
+    borderWidth: 1,
+    borderColor: 'rgba(56, 189, 248, 0.25)',
+  },
+  stopInfoLabel: {
+    color: '#949BA4',
+    fontSize: 10,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  stopInfoName: {
+    color: '#F2F3F5',
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  alertActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: RADII.pill,
+    shadowColor: '#000',
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+  },
+  alertBtnInactive: {
+    backgroundColor: '#383A40',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  alertBtnActive: {
+    backgroundColor: '#059669',
+    borderWidth: 1,
+    borderColor: '#34D399',
+  },
+  alertActionText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '700',
+  },
 });

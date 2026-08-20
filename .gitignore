@@ -27,6 +27,8 @@ web-build/
 # 4. Dados Privados / Dumps de Banco de Dados / Pipelines Proprietários
 data/private/
 scripts/private/
+data/gtfs/
+*.zip
 *.sqlite
 *.db
 *.parquet

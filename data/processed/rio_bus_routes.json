@@ -1,38 +1,2990 @@
 [
   {
-    "id": "474",
-    "shortName": "474",
-    "longName": "Jacaré x Jardim de Alah (Via Lapa / Copacabana)",
-    "category": "Zona Norte / Zona Sul"
+    "id": "O0636AAA0A",
+    "shortName": "636",
+    "longName": "Merck - Saens Peña",
+    "category": "Linha Regular"
   },
   {
-    "id": "606",
-    "shortName": "606",
-    "longName": "Rodoviária x Engenho de Dentro (Via Tijuca / Maracanã)",
-    "category": "Zona Norte / Centro"
+    "id": "O0805AAA0A",
+    "shortName": "805",
+    "longName": "Terminal Alvorada - Jardim Oceânico",
+    "category": "Linha Regular"
   },
   {
-    "id": "309",
-    "shortName": "309",
-    "longName": "Central x Alvorada (Via Botafogo / Copacabana / Barra)",
-    "category": "Centro / Zona Sul / Barra"
+    "id": "O0497AAA0A",
+    "shortName": "497",
+    "longName": "Penha - Largo do Machado",
+    "category": "Linha Regular"
   },
   {
-    "id": "483",
-    "shortName": "483",
-    "longName": "Penha x General Osório (Via Linha Vermelha / Copacabana)",
-    "category": "Zona Norte / Zona Sul"
+    "id": "E2343AAA0A",
+    "shortName": "2343",
+    "longName": "Ribeira - Castelo",
+    "category": "Linha Regular"
   },
   {
-    "id": "457",
+    "id": "E2305AAA0A",
+    "shortName": "2305",
+    "longName": "Jardim América - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2342AAA0A",
+    "shortName": "2342",
+    "longName": "Bananal - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2344AAA0A",
+    "shortName": "2344",
+    "longName": "Bancários - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0254AAA0A",
+    "shortName": "254",
+    "longName": "Madureira - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0238AAA0A",
+    "shortName": "238",
+    "longName": "Água Santa - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0238AAN0A",
+    "shortName": "SN238",
+    "longName": "Água Santa - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0247AAA0A",
+    "shortName": "247",
+    "longName": "Camarista Méier - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0249AAA0A",
+    "shortName": "249",
+    "longName": "Água Santa - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0265AAA0A",
+    "shortName": "265",
+    "longName": "Marechal Hermes - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0265AAN0A",
+    "shortName": "SN265",
+    "longName": "Marechal Hermes - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0277AAA0A",
+    "shortName": "277",
+    "longName": "Rocha Miranda - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0915AAA0A",
+    "shortName": "915",
+    "longName": "Bonsucesso - Aeroporto Internacional do RJ",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0232AAA0A",
+    "shortName": "232",
+    "longName": "Lins de Vasconcelos - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0885AAA0A",
+    "shortName": "885",
+    "longName": "Terminal Mato Alto - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0550AAPBA",
+    "shortName": "SPB550",
+    "longName": "Tijuquinha - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0831AAV0A",
+    "shortName": "SV831",
+    "longName": "Colônia - Terminal Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0692AAV0A",
+    "shortName": "SV692",
+    "longName": "Méier - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0232AAN0A",
+    "shortName": "SN232",
+    "longName": "Lins de Vasconcelos - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0292AAA0A",
+    "shortName": "292",
+    "longName": "Engenho da Rainha - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0765AAA0A",
+    "shortName": "765",
+    "longName": "Mendanha - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0296AAA0A",
+    "shortName": "296",
+    "longName": "Irajá - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0866AAV0A",
+    "shortName": "SV866",
+    "longName": "Terminal Campo Grande - Terminal Pingo d'Água",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0753AAA0A",
+    "shortName": "753",
+    "longName": "Santa Cruz - Metrô Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0298AAA0A",
+    "shortName": "298",
+    "longName": "Acari - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0311AAA0A",
+    "shortName": "311",
+    "longName": "Engenheiro Leal - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0803AAP0A",
+    "shortName": "SP803",
+    "longName": "Jabour - Terminal Sulacap",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0312AAA0A",
+    "shortName": "312",
+    "longName": "Olaria - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0313AAA0A",
+    "shortName": "313",
+    "longName": "Penha (Grotão) - Praça Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0321AAA0A",
+    "shortName": "321",
+    "longName": "Bancários - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0323AAA0A",
+    "shortName": "323",
+    "longName": "Bananal - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0325AAA0A",
+    "shortName": "325",
+    "longName": "Ribeira - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0326AAA0A",
+    "shortName": "326",
+    "longName": "Bancários - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0327AAA0A",
+    "shortName": "327",
+    "longName": "Ribeira - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0328AAA0A",
+    "shortName": "328",
+    "longName": "Bananal - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0329AAA0A",
+    "shortName": "329",
+    "longName": "Bancários - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0342AAA0A",
+    "shortName": "342",
+    "longName": "Jardim América - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0342AAR0A",
+    "shortName": "SR342",
+    "longName": "Jardim América - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0349AAA0A",
+    "shortName": "349",
+    "longName": "Rocha Miranda - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0355AAA0A",
+    "shortName": "355",
+    "longName": "Madureira - Praça Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0355AAR0A",
+    "shortName": "SR355",
+    "longName": "Madureira - Praça Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0362AAA0A",
+    "shortName": "362",
+    "longName": "Honório Gurgel - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0362AAR0A",
+    "shortName": "SR362",
+    "longName": "Honório Gurgel - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0378AAA0A",
+    "shortName": "378",
+    "longName": "Marechal Hermes - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0378AAR0A",
+    "shortName": "SR378",
+    "longName": "Marechal Hermes - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0384AAA0A",
+    "shortName": "384",
+    "longName": "Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0385AAA0A",
+    "shortName": "385",
+    "longName": "Village Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0324AAN0A",
+    "shortName": "SN324",
+    "longName": "Ribeira - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0298AAN0A",
+    "shortName": "SN298",
+    "longName": "Acari - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0399AAA0A",
+    "shortName": "399",
+    "longName": "Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0404AAP0A",
+    "shortName": "SP404",
+    "longName": "Caju - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0455AAA0A",
+    "shortName": "455",
+    "longName": "Méier - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0457AAA0A",
     "shortName": "457",
-    "longName": "Abolição x Copacabana (Via Túnel Rebouças / Botafogo)",
-    "category": "Zona Norte / Zona Sul"
+    "longName": "Abolição - Copacabana",
+    "category": "Linha Regular"
   },
   {
-    "id": "315",
+    "id": "O0483AAA0A",
+    "shortName": "483",
+    "longName": "Penha - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0484AAA0A",
+    "shortName": "484",
+    "longName": "Olaria - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0492AAA0A",
+    "shortName": "492",
+    "longName": "Bancários - Prado Júnior",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0386AAA0A",
+    "shortName": "386",
+    "longName": "Anchieta - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0621AAA0A",
+    "shortName": "621",
+    "longName": "Penha - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0622AAA0A",
+    "shortName": "622",
+    "longName": "Penha - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0623AAA0A",
+    "shortName": "623",
+    "longName": "Penha - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0624AAA0A",
+    "shortName": "624",
+    "longName": "Mariópolis - Praça da Bandeira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0625AAA0A",
+    "shortName": "625",
+    "longName": "Olaria - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0627AAA0A",
+    "shortName": "627",
+    "longName": "Inhaúma - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0628AAA0A",
+    "shortName": "628",
+    "longName": "Penha - Nova América",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0629AAA0A",
+    "shortName": "629",
+    "longName": "Irajá - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0630AAA0A",
+    "shortName": "630",
+    "longName": "Penha (IAPI) - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0638AAA0A",
+    "shortName": "638",
+    "longName": "Marechal Hermes - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0639AAA0A",
+    "shortName": "639",
+    "longName": "Jardim América - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0650AAA0A",
+    "shortName": "650",
+    "longName": "Marechal Hermes - Engenho Novo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0665AAA0A",
+    "shortName": "665",
+    "longName": "Pavuna - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0665AAVBA",
+    "shortName": "SVB665",
+    "longName": "Pavuna - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0669AAA0A",
+    "shortName": "669",
+    "longName": "Pavuna - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0669AAV0A",
+    "shortName": "SV669",
+    "longName": "Pavuna - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0679AAA0A",
+    "shortName": "679",
+    "longName": "Grotão - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0687AAA0A",
+    "shortName": "687",
+    "longName": "Pavuna - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0688AAA0A",
+    "shortName": "688",
+    "longName": "Méier - Pavuna",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0696AAA0A",
+    "shortName": "696",
+    "longName": "Méier - Praia do Dendê",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0711AAA0A",
+    "shortName": "711",
+    "longName": "Rocha Miranda - Rio Comprido",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0721AAA0A",
+    "shortName": "721",
+    "longName": "Vila Cruzeiro - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0778AAA0A",
+    "shortName": "778",
+    "longName": "Pavuna - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0629AAN0A",
+    "shortName": "SN629",
+    "longName": "Irajá - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0457AAN0A",
+    "shortName": "SN457",
+    "longName": "Abolição - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0639AAN0A",
+    "shortName": "SN639",
+    "longName": "Jardim América - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0901AAA0A",
+    "shortName": "901",
+    "longName": "Bonsucesso - Bananal",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0905AAA0A",
+    "shortName": "905",
+    "longName": "Bonsucesso - Irajá",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0906AAA0A",
+    "shortName": "906",
+    "longName": "Jardim América - Caju",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0606AAV0A",
+    "shortName": "SV606",
+    "longName": "Engenho de Dentro - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0910AAA0A",
+    "shortName": "910",
+    "longName": "Bananal - Irajá",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0913AAA0A",
+    "shortName": "913",
+    "longName": "Del Castilho - Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0920AAA0A",
+    "shortName": "920",
+    "longName": "Pavuna - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0928AAA0A",
+    "shortName": "928",
+    "longName": "Marechal Hermes - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0315AAA0A",
     "shortName": "315",
-    "longName": "Central x Recreio dos Bandeirantes (Via Linha Amarela)",
-    "category": "Centro / Zona Oeste"
+    "longName": "Central - Recreio dos Bandeirantes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0306AAA0A",
+    "shortName": "306",
+    "longName": "Praça Seca - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0338AAA0A",
+    "shortName": "338",
+    "longName": "Taquara - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0685AAA0A",
+    "shortName": "685",
+    "longName": "Terminal Margaridas - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0685AAVBA",
+    "shortName": "SVB685",
+    "longName": "Terminal Margaridas - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0950AAA0A",
+    "shortName": "950",
+    "longName": "Metrô Vicente de Carvalho - Terminal Margaridas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0951AAA0A",
+    "shortName": "951",
+    "longName": "Metrô Vicente de Carvalho - Terminal Margaridas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0663AAA0A",
+    "shortName": "663",
+    "longName": "Méier - Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0341AAA0A",
+    "shortName": "341",
+    "longName": "Taquara - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0343AAA0A",
+    "shortName": "343",
+    "longName": "Jardim Oceânico - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0343AAP0A",
+    "shortName": "SP343",
+    "longName": "Rio das Pedras - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0348AAA0A",
+    "shortName": "348",
+    "longName": "Riocentro - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0363AAA0A",
+    "shortName": "363",
+    "longName": "Vila Valqueire - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0363AAV0A",
+    "shortName": "SV363",
+    "longName": "Vila Valqueire - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0368AAA0A",
+    "shortName": "368",
+    "longName": "Riocentro - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0380AAA0A",
+    "shortName": "380",
+    "longName": "Curicica - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0793AAA0A",
+    "shortName": "793",
+    "longName": "Pavuna - Terminal Sulacap",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0363AAN0A",
+    "shortName": "SN363",
+    "longName": "Vila Valqueire - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0302AAN0A",
+    "shortName": "SN302",
+    "longName": "Terminal Gentileza - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0390AAA0A",
+    "shortName": "390",
+    "longName": "Curicica - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0550AAA0A",
+    "shortName": "550",
+    "longName": "Cidade de Deus - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0555AAA0A",
+    "shortName": "555",
+    "longName": "Rio das Pedras - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0557AAA0A",
+    "shortName": "557",
+    "longName": "Rio das Pedras - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0565AAA0A",
+    "shortName": "565",
+    "longName": "Tanque - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0600AAA0A",
+    "shortName": "600",
+    "longName": "Taquara - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0361AAA0A",
+    "shortName": "361",
+    "longName": "Recreio dos Bandeirantes - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2111AAA0A",
+    "shortName": "2111",
+    "longName": "Praça Seca - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2110AAA0A",
+    "shortName": "2110",
+    "longName": "Gardênia Azul - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2112AAA0A",
+    "shortName": "2112",
+    "longName": "Taquara - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2114AAA0A",
+    "shortName": "2114",
+    "longName": "Freguesia - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2345AAA0A",
+    "shortName": "2345",
+    "longName": "Vila Valqueire - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0601AAA0A",
+    "shortName": "601",
+    "longName": "Santa Maria - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0352AAA0A",
+    "shortName": "352",
+    "longName": "Riocentro - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0607AAA0A",
+    "shortName": "607",
+    "longName": "Cascadura - Rio Comprido",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0610AAA0A",
+    "shortName": "610",
+    "longName": "Del Castilho - Tanque",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0611AAA0A",
+    "shortName": "611",
+    "longName": "Camorim - Del Castilho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0613AAA0A",
+    "shortName": "613",
+    "longName": "Vargem Grande - Del Castilho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0613AAPAA",
+    "shortName": "SPA613",
+    "longName": "Riocentro - Del Castilho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0678AAA0A",
+    "shortName": "678",
+    "longName": "Méier - Vila Valqueire",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0712AAA0A",
+    "shortName": "712",
+    "longName": "Cascadura - Irajá",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0766AAA0A",
+    "shortName": "766",
+    "longName": "Madureira - Freguesia",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0774AAA0A",
+    "shortName": "774",
+    "longName": "Madureira - Jardim América",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0775AAA0A",
+    "shortName": "775",
+    "longName": "Jardim América - Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0829AAA0A",
+    "shortName": "829",
+    "longName": "Gardênia Azul - Freguesia",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0810AAA0A",
+    "shortName": "810",
+    "longName": "Terminal Taquara - Pontal",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0831AAA0A",
+    "shortName": "831",
+    "longName": "Colônia - Terminal Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0302AAA0A",
+    "shortName": "302",
+    "longName": "Terminal Gentileza - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0565AAN0A",
+    "shortName": "SN565",
+    "longName": "Tanque - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0844AAA0A",
+    "shortName": "844",
+    "longName": "Jardim Oceânico - Barrinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0550AAN0A",
+    "shortName": "SN550",
+    "longName": "Cidade de Deus - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0810AAP0A",
+    "shortName": "SP810",
+    "longName": "Terminal Taquara - Vargem Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0859AAA0A",
+    "shortName": "859",
+    "longName": "Covanca - Largo do Tanque",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0861AAA0A",
+    "shortName": "861",
+    "longName": "Rio das Pedras - Curicica",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0878AAA0A",
+    "shortName": "878",
+    "longName": "Tanque - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0878AAV0A",
+    "shortName": "SV878",
+    "longName": "Tanque - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0636AAN0A",
+    "shortName": "SN636",
+    "longName": "Merck - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0863AAA0A",
+    "shortName": "863",
+    "longName": "Rio das Pedras - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0862AAA0A",
+    "shortName": "862",
+    "longName": "Rio das Pedras - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0693AAA0A",
+    "shortName": "693",
+    "longName": "Méier - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0692AAA0A",
+    "shortName": "692",
+    "longName": "Méier - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0614AAA0A",
+    "shortName": "614",
+    "longName": "Del Castilho - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0810AAN0A",
+    "shortName": "SN810",
+    "longName": "Terminal Taquara - Pontal",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0880AAA0A",
+    "shortName": "880",
+    "longName": "Rio das Pedras - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0932AAA0A",
+    "shortName": "932",
+    "longName": "Gardênia Azul - Tanque",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0940AAA0A",
+    "shortName": "940",
+    "longName": "Ramos (Praia) - Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0652AAA0A",
+    "shortName": "652",
+    "longName": "Cascadura - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0369AAA0A",
+    "shortName": "369",
+    "longName": "Bangu - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0383AAA0A",
+    "shortName": "383",
+    "longName": "Realengo - Praça da República",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0388AAA0A",
+    "shortName": "388",
+    "longName": "Santa Cruz - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0393AAA0A",
+    "shortName": "393",
+    "longName": "Bangu - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0393AAR0A",
+    "shortName": "SR393",
+    "longName": "Bangu - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2307AAA0A",
+    "shortName": "2307",
+    "longName": "Jardim 7 de Abril - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2308AAA0A",
+    "shortName": "2308",
+    "longName": "Cosmos - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2309AAA0A",
+    "shortName": "2309",
+    "longName": "Urucânia - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2310AAA0A",
+    "shortName": "2310",
+    "longName": "Bangu - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2803AAA0A",
+    "shortName": "2803",
+    "longName": "Vila Kennedy - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0900AAA0A",
+    "shortName": "900",
+    "longName": "Taquara - Downtown",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0865AAA0A",
+    "shortName": "865",
+    "longName": "Pau da Fome - Terminal Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0954AAA0A",
+    "shortName": "954",
+    "longName": "Terminal Taquara - Recreio dos Bandeirantes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0954AAN0A",
+    "shortName": "SN954",
+    "longName": "Terminal Taquara - Recreio dos Bandeirantes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0393AAN0A",
+    "shortName": "SN393",
+    "longName": "Bangu - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0300AAR0A",
+    "shortName": "SR300",
+    "longName": "Terminal Sulacap - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0878AAN0A",
+    "shortName": "SN878",
+    "longName": "Tanque - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2336AAA0A",
+    "shortName": "2336",
+    "longName": "Campo Grande - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2303AAA0A",
+    "shortName": "2303",
+    "longName": "Cesarão - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2334AAA0A",
+    "shortName": "2334",
+    "longName": "Campo Grande - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2335AAA0A",
+    "shortName": "2335",
+    "longName": "Santa Cruz - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2337AAA0A",
+    "shortName": "2337",
+    "longName": "Santa Cruz - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2339AAA0A",
+    "shortName": "2339",
+    "longName": "Campo Grande - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2381AAA0A",
+    "shortName": "2381",
+    "longName": "Pedra de Guaratiba - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2383AAA0A",
+    "shortName": "2383",
+    "longName": "Sepetiba - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2802AAA0A",
+    "shortName": "2802",
+    "longName": "Santa Cruz - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2804AAA0A",
+    "shortName": "2804",
+    "longName": "Bangu - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0731AAA0A",
+    "shortName": "731",
+    "longName": "Campo Grande - Marechal Hermes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0731AAN0A",
+    "shortName": "SN731",
+    "longName": "Campo Grande - Marechal Hermes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0745AAA0A",
+    "shortName": "745",
+    "longName": "Bangu - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0746AAA0A",
+    "shortName": "746",
+    "longName": "Jabour - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0756AAA0A",
+    "shortName": "756",
+    "longName": "Santa Cruz - Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0759AAA0A",
+    "shortName": "759",
+    "longName": "Cesarão - Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0777AAV0A",
+    "shortName": "SV777",
+    "longName": "Padre Miguel - Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0790AAA0A",
+    "shortName": "790",
+    "longName": "Campo Grande - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0794AAA0A",
+    "shortName": "794",
+    "longName": "Bangu - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0801AAA0A",
+    "shortName": "801",
+    "longName": "Bangu - Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0801AAP0A",
+    "shortName": "SP801",
+    "longName": "Bangu - Terminal Sulacap",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0809AAA0A",
+    "shortName": "809",
+    "longName": "Sagrado Coração - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0812AAA0A",
+    "shortName": "812",
+    "longName": "Carobinha - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2338AAA0A",
+    "shortName": "2338",
+    "longName": "Terminal Campo Grande - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0770AAA0A",
+    "shortName": "770",
+    "longName": "Campo Grande - Metrô Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0771AAA0A",
+    "shortName": "771",
+    "longName": "Campo Grande - Metrô Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0802AAA0A",
+    "shortName": "802",
+    "longName": "Terminal Campo Grande - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0397AAR0A",
+    "shortName": "SR397",
+    "longName": "Terminal Campo Grande - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0397AAN0A",
+    "shortName": "SN397",
+    "longName": "Terminal Campo Grande - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0790AAN0A",
+    "shortName": "SN790",
+    "longName": "Campo Grande - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0819AAA0A",
+    "shortName": "819",
+    "longName": "Jardim Bangu - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0821AAA0A",
+    "shortName": "821",
+    "longName": "Campo Grande - Corcundinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0822AAA0A",
+    "shortName": "822",
+    "longName": "Campo Grande - Corcundinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0825AAA0A",
+    "shortName": "825",
+    "longName": "Campo Grande - Jesuítas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0830AAA0A",
+    "shortName": "830",
+    "longName": "Pedregoso - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0833AAA0A",
+    "shortName": "833",
+    "longName": "Conjunto Manguariba - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0741AAA0A",
+    "shortName": "741",
+    "longName": "Terminal Sulacap - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0743AAA0A",
+    "shortName": "743",
+    "longName": "Terminal Sulacap - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0840AAA0A",
+    "shortName": "840",
+    "longName": "São Fernando - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0842AAA0A",
+    "shortName": "842",
+    "longName": "Paciência - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0849AAA0A",
+    "shortName": "849",
+    "longName": "Base Aérea de Santa Cruz - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0851AAA0A",
+    "shortName": "851",
+    "longName": "Campo Grande - Escola Amazonas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0790AAV0A",
+    "shortName": "SV790",
+    "longName": "Campo Grande - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0918AAP0A",
+    "shortName": "SP918",
+    "longName": "Jardim Violeta - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0794AAN0A",
+    "shortName": "SN794",
+    "longName": "Jabour - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0869AAA0A",
+    "shortName": "869",
+    "longName": "Santa Margarida - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0807AAA0A",
+    "shortName": "807",
+    "longName": "Jesuítas - Terminal Curral Falso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0803AAN0A",
+    "shortName": "SN803",
+    "longName": "Jabour - Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0803AAA0A",
+    "shortName": "803",
+    "longName": "Jabour - Taquara",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0870AAA0A",
+    "shortName": "870",
+    "longName": "Sepetiba - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0835AAA0A",
+    "shortName": "835",
+    "longName": "Largo do Correia - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0837AAA0A",
+    "shortName": "837",
+    "longName": "Terminal Campo Grande - Conjunto da Marinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0838AAA0A",
+    "shortName": "838",
+    "longName": "Terminal Campo Grande - Terminal Magarça",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0846AAA0A",
+    "shortName": "846",
+    "longName": "Rio da Prata - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0852AAA0A",
+    "shortName": "852",
+    "longName": "Terminal Campo Grande - Pedra de Guaratiba",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0866AAA0A",
+    "shortName": "866",
+    "longName": "Terminal Campo Grande - Pedra de Guaratiba",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0867AAA0A",
+    "shortName": "867",
+    "longName": "Barra de Guaratiba - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0884AAA0A",
+    "shortName": "884",
+    "longName": "Sepetiba - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0884AAN0A",
+    "shortName": "SN884",
+    "longName": "Sepetiba - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0840AAN0A",
+    "shortName": "SN840",
+    "longName": "São Fernando - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0867AAN0A",
+    "shortName": "SN867",
+    "longName": "Barra de Guaratiba - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0892AAA0A",
+    "shortName": "892",
+    "longName": "São Benedito - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0893AAA0A",
+    "shortName": "893",
+    "longName": "Jardim Palmares - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0895AAA0A",
+    "shortName": "895",
+    "longName": "Serrinha - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0843AAA0A",
+    "shortName": "843",
+    "longName": "Boa Esperança - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0898AAA0A",
+    "shortName": "898",
+    "longName": "Sepetiba - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0918AAA0A",
+    "shortName": "918",
+    "longName": "Bangu - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0926AAA0A",
+    "shortName": "926",
+    "longName": "Senador Camará - Penha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0006AAA0A",
+    "shortName": "006",
+    "longName": "Silvestre - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0846AAN0A",
+    "shortName": "SN846",
+    "longName": "Rio da Prata - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0821AAN0A",
+    "shortName": "SN821",
+    "longName": "Campo Grande - Corcundinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0872AAA0A",
+    "shortName": "872",
+    "longName": "Praia de Sepetiba - Terminal Mato Alto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0883AAA0A",
+    "shortName": "883",
+    "longName": "Terminal Mato Alto - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0897AAN0A",
+    "shortName": "SN897",
+    "longName": "Santa Cruz - Terminal Pingo d'Água",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0836AAA0A",
+    "shortName": "836",
+    "longName": "Rio da Prata - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0854AAAAA",
+    "shortName": "854",
+    "longName": "Terminal Campo Grande - Ilha de Guaratiba",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0834AAA0A",
+    "shortName": "834",
+    "longName": "Terminal Campo Grande - Cabuçu de Baixo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0841AAA0A",
+    "shortName": "841",
+    "longName": "Campo Grande - Inhoaíba",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0898AAN0A",
+    "shortName": "SN898",
+    "longName": "Sepetiba - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0893AAN0A",
+    "shortName": "SN893",
+    "longName": "Jardim Palmares - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0864AAP0A",
+    "shortName": "SP864",
+    "longName": "Terminal Campo Grande - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0553AAA0A",
+    "shortName": "553",
+    "longName": "Recreio dos Bandeirantes - Rio Sul",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0335AAA0A",
+    "shortName": "335",
+    "longName": "Cordovil - Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0485AAA0A",
+    "shortName": "485",
+    "longName": "Fundão - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0483AAN0A",
+    "shortName": "SN483",
+    "longName": "Penha - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0766AAP0A",
+    "shortName": "SP766",
+    "longName": "Três Rios - Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0483AAV0A",
+    "shortName": "SV483",
+    "longName": "General Osório - Penha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0483AAPAA",
+    "shortName": "SPA483",
+    "longName": "Fiocruz - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0483AAPBA",
+    "shortName": "SPB483",
+    "longName": "Parque União - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0922AAV0A",
+    "shortName": "SV922",
+    "longName": "Tubiacanga - Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0550AAPAA",
+    "shortName": "SPA550",
+    "longName": "Cidade de Deus - Rocinha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0759AAP0A",
+    "shortName": "SP759",
+    "longName": "Cesarão - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0805AAP0A",
+    "shortName": "SP805",
+    "longName": "Terminal Alvorada - Passarela da Barra",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0987AAA0A",
+    "shortName": "987",
+    "longName": "Gardênia Azul - Pechincha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0498AAV0A",
+    "shortName": "LECD152",
+    "longName": "Circular da Penha - Largo do Machado",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0474AAA0A",
+    "shortName": "474",
+    "longName": "Jacaré - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0808AAA0A",
+    "shortName": "808",
+    "longName": "Salim - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0899AAA0A",
+    "shortName": "899",
+    "longName": "Barra de Guaratiba - Terminal Recreio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0990AAA0A",
+    "shortName": "990",
+    "longName": "Merck - Joatinga",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0899AAV0A",
+    "shortName": "SV899",
+    "longName": "Barra de Guaratiba - Terminal Recreio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0645AAA0A",
+    "shortName": "645",
+    "longName": "Terminal Alvorada - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0901AAVBA",
+    "shortName": "SVB901",
+    "longName": "Bonsucesso - Bananal",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0817AAA0A",
+    "shortName": "817",
+    "longName": "Piabas - Vargem Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0300AAA0A",
+    "shortName": "300",
+    "longName": "Terminal Sulacap - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0552AAA0A",
+    "shortName": "552",
+    "longName": "Terminal Alvorada - Rio Sul",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0554AAA0A",
+    "shortName": "554",
+    "longName": "Piabas - Rio Sul",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0921AAA0A",
+    "shortName": "921",
+    "longName": "Bancários - Ribeira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0881AAA0A",
+    "shortName": "881",
+    "longName": "Taquara - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0399AAR0A",
+    "shortName": "SR399",
+    "longName": "Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0388AAR0A",
+    "shortName": "SR388",
+    "longName": "Santa Cruz - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0757AAA0A",
+    "shortName": "757",
+    "longName": "Sepetiba - Coelho Neto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0397AAA0A",
+    "shortName": "397",
+    "longName": "Terminal Campo Grande - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0847AAA0A",
+    "shortName": "847",
+    "longName": "Rio da Prata - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0350AAA0A",
+    "shortName": "350",
+    "longName": "Irajá - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0328AAN0A",
+    "shortName": "SN328",
+    "longName": "Bananal - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0368AAN0A",
+    "shortName": "SN368",
+    "longName": "Riocentro - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0880AAN0A",
+    "shortName": "SN880",
+    "longName": "Rio das Pedras - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0388AAN0A",
+    "shortName": "SN388",
+    "longName": "Santa Cruz - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0355AAN0A",
+    "shortName": "SN355",
+    "longName": "Madureira - Praça Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0371AAA0A",
+    "shortName": "371",
+    "longName": "Praça Seca - Praça Tiradentes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0399AAN0A",
+    "shortName": "SN399",
+    "longName": "Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0783AAA0A",
+    "shortName": "783",
+    "longName": "Terminal Deodoro - Praça Seca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0788AAA0A",
+    "shortName": "788",
+    "longName": "Terminal Campo Grande - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0384AAR0A",
+    "shortName": "SR384",
+    "longName": "Pavuna - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0386AAR0A",
+    "shortName": "SR386",
+    "longName": "Anchieta - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0861AAN0A",
+    "shortName": "SN861",
+    "longName": "Rio das Pedras - Curicica",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0497AAN0A",
+    "shortName": "SN497",
+    "longName": "Penha - Largo do Machado",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0301AAA0A",
+    "shortName": "301",
+    "longName": "Terminal Gentileza - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0328AAR0A",
+    "shortName": "SR328",
+    "longName": "Bananal - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0897AAA0A",
+    "shortName": "897",
+    "longName": "Paciência - Terminal Pingo d'Água",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0871AAA0A",
+    "shortName": "871",
+    "longName": "Terminal Pingo d'Água - Cesarão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0624AAN0A",
+    "shortName": "SN624",
+    "longName": "Mariópolis - Praça da República",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0785AAA0A",
+    "shortName": "785",
+    "longName": "Cascadura - Marechal Hermes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0653AAA0A",
+    "shortName": "653",
+    "longName": "Terminal Deodoro - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0764AAA0A",
+    "shortName": "764",
+    "longName": "Catiri - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0606AAA0A",
+    "shortName": "606",
+    "longName": "Engenho de Dentro - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0600AAN0A",
+    "shortName": "SN600",
+    "longName": "Taquara - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0919AAA0A",
+    "shortName": "919",
+    "longName": "Pavuna - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0919AAN0A",
+    "shortName": "SN919",
+    "longName": "Pavuna - Maré",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0885AAN0A",
+    "shortName": "SN885",
+    "longName": "Terminal Mato Alto - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0825AAN0A",
+    "shortName": "SN825",
+    "longName": "Campo Grande - Jesuítas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0737AAA0A",
+    "shortName": "737",
+    "longName": "Santíssimo - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0826AAA0A",
+    "shortName": "826",
+    "longName": "Carobinha - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0895AAN0A",
+    "shortName": "SN895",
+    "longName": "Serrinha - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0857AAA0A",
+    "shortName": "857",
+    "longName": "Terminal Campo Grande - Terminal Pingo d'Água",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0857AAN0A",
+    "shortName": "SN857",
+    "longName": "Terminal Campo Grande - Terminal Pingo D'Água",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0353AAN0A",
+    "shortName": "SN353",
+    "longName": "Gardênia Azul - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0312AAN0A",
+    "shortName": "SN312",
+    "longName": "Penha - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0795AAP0A",
+    "shortName": "SP795",
+    "longName": "Pavuna - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0921AAV0A",
+    "shortName": "SV921",
+    "longName": "Bancários - Ribeira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0353AAA0A",
+    "shortName": "353",
+    "longName": "Gardênia Azul - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0265AAP0A",
+    "shortName": "SP265",
+    "longName": "Marechal Hermes - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0754AAA0A",
+    "shortName": "754",
+    "longName": "Santa Cruz - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0855AAA0A",
+    "shortName": "855",
+    "longName": "Terminal Magarça - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0922AAA0A",
+    "shortName": "922",
+    "longName": "Tubiacanga - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0779AAA0A",
+    "shortName": "779",
+    "longName": "Metrô Pavuna - Terminal Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0779AAN0A",
+    "shortName": "SN779",
+    "longName": "Metrô Pavuna - Terminal Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0863AAV0A",
+    "shortName": "SV863",
+    "longName": "Rio das Pedras - Barra da Tijuca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0324AAA0A",
+    "shortName": "324",
+    "longName": "Ribeira - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0324AAP0A",
+    "shortName": "SP324",
+    "longName": "Ribeira - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0328AAP0A",
+    "shortName": "SP328",
+    "longName": "Bananal - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0329AAP0A",
+    "shortName": "SP329",
+    "longName": "Bancários - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0796AAA0A",
+    "shortName": "796",
+    "longName": "Cosmos - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0391AAA0A",
+    "shortName": "391",
+    "longName": "Padre Miguel - Praça da República",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0326AAPBA",
+    "shortName": "SPB326",
+    "longName": "Bancários - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0624AAV0A",
+    "shortName": "SV624",
+    "longName": "Mariópolis - Praça da Bandeira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0651AAA0A",
+    "shortName": "651",
+    "longName": "Cascadura - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0616AAA0A",
+    "shortName": "616",
+    "longName": "Del Castilho - Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0786AAA0A",
+    "shortName": "786",
+    "longName": "Terminal Campo Grande - Cascadura",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0961AAA0A",
+    "shortName": "961",
+    "longName": "Rio das Pedras - Recreio dos Bandeirantes",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0894AAA0A",
+    "shortName": "894",
+    "longName": "Terminal Campo Grande - Jardim Moriçaba",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0908AAA0A",
+    "shortName": "908",
+    "longName": "Terminal Deodoro - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0908AAN0A",
+    "shortName": "SN908",
+    "longName": "Terminal Deodoro - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0696AAN0A",
+    "shortName": "SN696",
+    "longName": "Méier - Praia do Dendê",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0908AAV0A",
+    "shortName": "SV908",
+    "longName": "Terminal Deodoro - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0868AAA0A",
+    "shortName": "868",
+    "longName": "Urucânia - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0853AAV0A",
+    "shortName": "SV853",
+    "longName": "Terminal Mato Alto - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0383AAN0A",
+    "shortName": "SN383",
+    "longName": "Realengo - Praça da República",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0389AAP0A",
+    "shortName": "SP389",
+    "longName": "Vila Aliança - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0780AAA0A",
+    "shortName": "780",
+    "longName": "Metrô Pavuna - Terminal Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0799AAA0A",
+    "shortName": "799",
+    "longName": "Metrô Pavuna - Bangu",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0917AAV0A",
+    "shortName": "SV917",
+    "longName": "Padre Miguel - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0946AAA0A",
+    "shortName": "946",
+    "longName": "Pavuna - Engenho da Rainha",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0975AAA0A",
+    "shortName": "975",
+    "longName": "Madureira - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0979AAA0A",
+    "shortName": "979",
+    "longName": "Terminal Madureira - Terminal Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0820AAA0A",
+    "shortName": "820",
+    "longName": "Rio da Prata - Terminal Mato Alto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0864AAA0A",
+    "shortName": "864",
+    "longName": "Terminal Campo Grande - Terminal Sulacap",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0848AAN0A",
+    "shortName": "SN848",
+    "longName": "Terminal Campo Grande - Monte Santo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0848AAA0A",
+    "shortName": "848",
+    "longName": "Terminal Campo Grande - Monte Santo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0649AAA0A",
+    "shortName": "LECD126",
+    "longName": "Méier - Parque Piedade",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2614AAA0A",
+    "shortName": "2614",
+    "longName": "Terminal Alvorada - Metrô Del Castilho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "E2613AAA0A",
+    "shortName": "2613",
+    "longName": "Riocentro - Metrô Del Castilho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0856AAA0A",
+    "shortName": "LECD156",
+    "longName": "Capoeira Grande - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0850AAA0A",
+    "shortName": "850",
+    "longName": "Mendanha - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0635AAP0A",
+    "shortName": "SP635",
+    "longName": "Terminal Fundão - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0635AAA0A",
+    "shortName": "635",
+    "longName": "Bananal - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0925AAA0A",
+    "shortName": "925",
+    "longName": "Bancários - Aeroporto Internacional do RJ",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0554AAN0A",
+    "shortName": "SN554",
+    "longName": "Piabas - Metrô Botafogo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0804AAA0A",
+    "shortName": "804",
+    "longName": "Terminal Curral Falso - Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0917AAA0A",
+    "shortName": "917",
+    "longName": "Padre Miguel - Bonsucesso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0845AAA0A",
+    "shortName": "845",
+    "longName": "Cantagalo - Terminal Campo Grande",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0239AAA0A",
+    "shortName": "239",
+    "longName": "Água Santa - Passeio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0791AAA0A",
+    "shortName": "791",
+    "longName": "Padre Miguel - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0691AAA0A",
+    "shortName": "691",
+    "longName": "Méier - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0853AAN0A",
+    "shortName": "SN853",
+    "longName": "Terminal Mato Alto - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0805AAN0A",
+    "shortName": "SN805",
+    "longName": "Terminal Alvorada - Jardim Oceânico",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0319AAA0A",
+    "shortName": "319",
+    "longName": "Terminal Alvorada - Central do Brasil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0319AAV0A",
+    "shortName": "SV319",
+    "longName": "Terminal Alvorada - Central do Brasil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0319AAN0A",
+    "shortName": "SN319",
+    "longName": "Terminal Alvorada - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0292AAN0A",
+    "shortName": "SN292",
+    "longName": "Engenho da Rainha - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0634AAA0A",
+    "shortName": "634",
+    "longName": "Bananal - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0435AAA0A",
+    "shortName": "LECD151",
+    "longName": "Grajaú - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0433AAA0A",
+    "shortName": "LECD150",
+    "longName": "Grajaú - Metrô Siqueira Campos",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0456AAA0A",
+    "shortName": "456",
+    "longName": "Norte Shopping - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0685AAVAA",
+    "shortName": "SVA685",
+    "longName": "Terminal Margaridas - Méier",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0774AAV0A",
+    "shortName": "SV774",
+    "longName": "Madureira - Jardim América",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0944AAA0A",
+    "shortName": "944",
+    "longName": "Metrô Pavuna - Terminal Margaridas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0959AAA0A",
+    "shortName": "959",
+    "longName": "Metrô Vicente de Carvalho - Terminal Margaridas",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0552AAN0A",
+    "shortName": "SN552",
+    "longName": "Terminal Alvorada - Metrô Botafogo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0485AAP0A",
+    "shortName": "SP485",
+    "longName": "Cidade Nova - Fundão",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0486AAA0A",
+    "shortName": "486",
+    "longName": "Fundão - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0519AAA0A",
+    "shortName": "519",
+    "longName": "Urca - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0518AAA0A",
+    "shortName": "518",
+    "longName": "Urca - Botafogo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0107AAA0A",
+    "shortName": "107",
+    "longName": "Central - Urca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0201AAA0A",
+    "shortName": "201",
+    "longName": "Santa Alexandrina - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0202AAA0A",
+    "shortName": "202",
+    "longName": "Rio Comprido - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0210AAA0A",
+    "shortName": "210",
+    "longName": "Caju - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0217AAA0A",
+    "shortName": "217",
+    "longName": "Andaraí - Carioca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0220AAA0A",
+    "shortName": "220",
+    "longName": "Usina - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0229AAA0A",
+    "shortName": "229",
+    "longName": "Usina - Castelo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0275AAA0A",
+    "shortName": "275",
+    "longName": "Méier - Candelária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0010AAA0A",
+    "shortName": "010",
+    "longName": "Bairro de Fátima - Central do Brasil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0410AAA0A",
+    "shortName": "410",
+    "longName": "Saens Peña - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0415AAA0A",
+    "shortName": "415",
+    "longName": "Usina - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0415AAN0A",
+    "shortName": "SN415",
+    "longName": "Usina - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0422AAA0A",
+    "shortName": "422",
+    "longName": "Grajaú - Cosme Velho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0422AAN0A",
+    "shortName": "SN422",
+    "longName": "Grajaú - Cosme Velho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0133AAN0A",
+    "shortName": "SN133",
+    "longName": "Largo do Machado - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0426AAA0A",
+    "shortName": "426",
+    "longName": "Usina - Jardim de Alah",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0100AAA0A",
+    "shortName": "100",
+    "longName": "General Osório - Central",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0007AAA0A",
+    "shortName": "007",
+    "longName": "Silvestre - Central do Brasil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0117AAA0A",
+    "shortName": "117",
+    "longName": "Central - Cosme Velho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0209AAA0A",
+    "shortName": "209",
+    "longName": "Candelária - Caju",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0461AAA0A",
+    "shortName": "461",
+    "longName": "São Cristóvão - Ipanema",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0472AAA0A",
+    "shortName": "472",
+    "longName": "Triagem - Leme",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0473AAA0A",
+    "shortName": "473",
+    "longName": "São Januário - Lido",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0474AAV0A",
+    "shortName": "SV474",
+    "longName": "Jacaré - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0476AAA0A",
+    "shortName": "476",
+    "longName": "Méier - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0507AAA0A",
+    "shortName": "507",
+    "longName": "Silvestre - Largo do Machado",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0539AAA0A",
+    "shortName": "539",
+    "longName": "Rocinha - Leme",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0409AAA0A",
+    "shortName": "409",
+    "longName": "Saens Peña - Horto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0583AAA0A",
+    "shortName": "583",
+    "longName": "Cosme Velho - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0584AAA0A",
+    "shortName": "584",
+    "longName": "Cosme Velho - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0603AAA0A",
+    "shortName": "603",
+    "longName": "Usina - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0608AAA0A",
+    "shortName": "608",
+    "longName": "Grajaú - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0626AAA0A",
+    "shortName": "626",
+    "longName": "Saens Peña - Muda",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0448AAA0A",
+    "shortName": "448",
+    "longName": "Furnas - São Conrado",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0513AAA0A",
+    "shortName": "513",
+    "longName": "Urca - Botafogo",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0474AAN0A",
+    "shortName": "SN474",
+    "longName": "Méier - Copacabana",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0104AAA0A",
+    "shortName": "104",
+    "longName": "São Conrado - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0133AAA0A",
+    "shortName": "133",
+    "longName": "Largo do Machado - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0104AAN0A",
+    "shortName": "SN104",
+    "longName": "São Conrado - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0165AAA0A",
+    "shortName": "165",
+    "longName": "Terminal Gentileza - Cosme Velho",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0161AAA0A",
+    "shortName": "161",
+    "longName": "Terminal Gentileza - Ipanema",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0007AAN0A",
+    "shortName": "SN007",
+    "longName": "Silvestre - Central",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0167AAA0A",
+    "shortName": "167",
+    "longName": "Terminal Gentileza - Urca",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0585AAA0A",
+    "shortName": "585",
+    "longName": "Largo do Machado - Jardim de Alah",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0169AAA0A",
+    "shortName": "169",
+    "longName": "Terminal Gentileza - General Osório",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0111AAA0A",
+    "shortName": "LECD134",
+    "longName": "Central do Brasil - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0475AAA0A",
+    "shortName": "LECD133",
+    "longName": "Metrô São Cristóvão - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0416AAA0A",
+    "shortName": "416",
+    "longName": "Saens Peña - Horto",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0164AAA0A",
+    "shortName": "LECD136",
+    "longName": "Terminal Gentileza - Leme",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0536AAA0A",
+    "shortName": "LECD138",
+    "longName": "Rocinha - Leme",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0162AAA0A",
+    "shortName": "162",
+    "longName": "Terminal Gentileza - Alto Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0160AAA0A",
+    "shortName": "160",
+    "longName": "Terminal Gentileza - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0157AAA0A",
+    "shortName": "157",
+    "longName": "Gávea - Rodoviária",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0209AAN0A",
+    "shortName": "SN209",
+    "longName": "Passeio - Caju",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0410AAN0A",
+    "shortName": "SN410",
+    "longName": "Saens Peña - Gávea",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0463AAA0A",
+    "shortName": "LECD153",
+    "longName": "Metrô São Cristóvão - Metrô Siqueira Campos",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0439AAA0A",
+    "shortName": "LECD154",
+    "longName": "Vila Isabel - Leblon",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0222AAA0A",
+    "shortName": "LECD155",
+    "longName": "Grajaú - Gamboa",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0798AAA0A",
+    "shortName": "798",
+    "longName": "Urucânia - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0014AAA0A",
+    "shortName": "014",
+    "longName": "Paula Matos - Central do Brasil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0109AAA0A",
+    "shortName": "109",
+    "longName": "São Conrado - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0665AAVAA",
+    "shortName": "SVA665",
+    "longName": "Metrô Pavuna - Saens Peña",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "O0853AAA0A",
+    "shortName": "853",
+    "longName": "Terminal Mato Alto - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "s0cv",
+    "shortName": "54",
+    "longName": "Centro Olímpico - Anil",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000101130",
+    "shortName": "10",
+    "longName": "Santa Cruz - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000111110",
+    "shortName": "11",
+    "longName": "Santa Cruz - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000171110",
+    "shortName": "17",
+    "longName": "Campo Grande - Santa Cruz",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000181130",
+    "shortName": "18",
+    "longName": "Pontal - Terminal Jardim Oceânico",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000141130",
+    "shortName": "14",
+    "longName": "Santa Eugênia - Terminal Recreio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000801110",
+    "shortName": "80",
+    "longName": "Penha - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000351110",
+    "shortName": "35",
+    "longName": "Terminal Madureira - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000411130",
+    "shortName": "41",
+    "longName": "Terminal Madureira - Terminal Recreio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000421110",
+    "shortName": "42",
+    "longName": "Galeão - Madureira",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000521110",
+    "shortName": "52",
+    "longName": "Terminal Deodoro - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000531130",
+    "shortName": "53",
+    "longName": "Terminal Sulacap - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000EXEC1110",
+    "shortName": "ESP01",
+    "longName": "Galeão - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000201130",
+    "shortName": "20",
+    "longName": "Santa Cruz - Salvador Allende",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000461130",
+    "shortName": "46",
+    "longName": "Penha - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000151130",
+    "shortName": "15",
+    "longName": "Terminal Curral Falso - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000131130",
+    "shortName": "13",
+    "longName": "Terminal Mato Alto - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000251130",
+    "shortName": "25",
+    "longName": "Terminal Mato Alto - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000121130",
+    "shortName": "12",
+    "longName": "Terminal Pingo d'Água - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000901110",
+    "shortName": "90",
+    "longName": "Terminal Fundão - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000191130",
+    "shortName": "19",
+    "longName": "Terminal Pingo d'Água - Salvador Allende",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000161130",
+    "shortName": "16",
+    "longName": "Magarça - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000601110",
+    "shortName": "60",
+    "longName": "Terminal Deodoro - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000611130",
+    "shortName": "61",
+    "longName": "Terminal Deodoro - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000221110",
+    "shortName": "22",
+    "longName": "Terminal Alvorada - Terminal Jardim Oceânico",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000701110",
+    "shortName": "70",
+    "longName": "Terminal Margaridas - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000681130",
+    "shortName": "68",
+    "longName": "Bangu - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000731130",
+    "shortName": "73",
+    "longName": "Terminal Margaridas - Terminal Gentileza",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000511110",
+    "shortName": "51",
+    "longName": "Terminal Deodoro - Terminal Recreio",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000281130",
+    "shortName": "28",
+    "longName": "Terminal Pingo d'Água - Terminal Curral Falso",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000671130",
+    "shortName": "67",
+    "longName": "Terminal Campo Grande - Terminal Deodoro",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000501110",
+    "shortName": "50",
+    "longName": "Terminal Jardim Oceânico - Terminal Centro Olímpico",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000431130",
+    "shortName": "43",
+    "longName": "Terminal Fundão - Santa Efigênia",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000311140",
+    "shortName": "31",
+    "longName": "Vicente de Carvalho - Terminal Alvorada",
+    "category": "Linha Regular"
+  },
+  {
+    "id": "20000401130",
+    "shortName": "40",
+    "longName": "Terminal Madureira - Terminal Alvorada",
+    "category": "Linha Regular"
   }
 ]

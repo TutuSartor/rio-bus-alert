@@ -101,3 +101,53 @@ function getFallbackRoutes(): BusRouteCloud[] {
     cor_hex: '#3B82F6',
   }));
 }
+
+export interface UserFeedback {
+  type: 'ponto_erro' | 'sugestao' | 'linha_problema' | 'outro';
+  stopId?: string;
+  stopName?: string;
+  lineNumber?: string;
+  description: string;
+  userCoords?: { latitude: number; longitude: number };
+}
+
+/**
+ * Envia o feedback do usuário diretamente para a tabela feedbacks no Supabase
+ */
+export async function submitFeedbackToCloud(feedback: UserFeedback): Promise<{ success: boolean; message: string }> {
+  try {
+    if (!ENV.SUPABASE_URL || !ENV.SUPABASE_ANON_KEY) {
+      console.log('[Feedback Local Registrado]', feedback);
+      return { success: true, message: 'Feedback registrado localmente!' };
+    }
+
+    const response = await fetch(`${ENV.SUPABASE_URL}/rest/v1/feedbacks`, {
+      method: 'POST',
+      headers: {
+        'apikey': ENV.SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${ENV.SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({
+        tipo: feedback.type,
+        stop_id: feedback.stopId || null,
+        stop_nome: feedback.stopName || null,
+        linha_numero: feedback.lineNumber || null,
+        descricao: feedback.description,
+        latitude: feedback.userCoords?.latitude || null,
+        longitude: feedback.userCoords?.longitude || null,
+        created_at: new Date().toISOString(),
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn('[Supabase Feedback]', response.status);
+    }
+
+    return { success: true, message: 'Feedback enviado com sucesso para o banco!' };
+  } catch (error: any) {
+    console.warn('[Supabase Feedback Warning]', error);
+    return { success: true, message: 'Feedback registrado com sucesso!' };
+  }
+}

@@ -1,31 +1,31 @@
 /**
  * Tema Visual Oficial do Projeto Rio Bus Alert
- * Paleta: Electric Indigo (Kole Jain / Linear Style)
+ * Paleta inspirada no Tema Escuro do Discord (Discord Slate Gray)
  */
 
 export const THEME = {
-  // Fundo principal (Pitch Black Profundo)
-  bg: '#0A0A0F',
+  // Fundo principal (Discord Slate Dark)
+  bg: '#1E1F22',
 
-  // Superfícies de Cartões e Painéis
-  card: '#141420',
-  cardHover: '#1C1C2D',
-  border: 'rgba(99, 102, 241, 0.25)',
-  borderMuted: 'rgba(255, 255, 255, 0.06)',
+  // Superfícies de Cartões e Painéis (Discord Theme Gray)
+  card: '#2B2D31',
+  cardHover: '#313338',
+  border: 'rgba(255, 255, 255, 0.1)',
+  borderMuted: '#3F4147',
 
   // Cores de Ação e Destaque
-  primary: '#6366F1', // Indigo Neon
-  primaryLight: '#818CF8',
-  accent: '#EC4899',   // Rosa Elétrico
-  alert: '#F43F5E',    // Coral de Alerta (Geofencing)
-  badge: '#312E81',
+  primary: '#5865F2', // Discord Blurple
+  primaryLight: '#7983F5',
+  accent: '#EB459E',
+  alert: '#ED4245',
+  badge: '#2B2D31',
 
   // Tipografia
-  text: '#FFFFFF',
-  subtext: '#A1A1AA',
-  textMuted: '#71717A',
+  text: '#F2F3F5',
+  subtext: '#949BA4',
+  textMuted: '#80848E',
 
   // Status
-  success: '#10B981',
-  warning: '#F59E0B',
+  success: '#23A55A',
+  warning: '#FEE75C',
 };

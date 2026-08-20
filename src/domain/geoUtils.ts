@@ -67,27 +67,37 @@ export function isWithinGeofence(
 }
 
 /**
- * Estimativa Probabilística de Tempo de Chegada (ETA em minutos)
- * Retorna estimativa pontual + intervalo de confiança empírico
+ * Estimativa Probabilística de Tempo de Chegada (ETA Cinemático com Dwell Time)
+ * Leva em consideração a distância na via, velocidade real e a penalidade por paradas intermediárias.
  */
 export function estimateArrivalTime(
   distanceMeters: number,
-  currentSpeedKmh: number
-): { minMinutes: number; estimatedMinutes: number; maxMinutes: number } {
-  // Se o ônibus estiver parado ou velocidade for nula, assume velocidade urbana média do Rio (18 km/h)
-  const effectiveSpeedKmh = currentSpeedKmh > 5 ? currentSpeedKmh : 18;
-  const speedMetersPerMinute = (effectiveSpeedKmh * 1000) / 60;
+  currentSpeedKmh: number,
+  intermediateStopsCount: number = 0,
+  dwellTimeSecondsPerStop: number = 20
+): { minMinutes: number; estimatedMinutes: number; maxMinutes: number; intermediateStops: number } {
+  // Se o ônibus estiver parado em semáforo/ponto, assume velocidade média urbana de tráfego do Rio (22 km/h)
+  const effectiveSpeedKmh = currentSpeedKmh > 5 ? currentSpeedKmh : 22;
+  const speedMetersPerSecond = (effectiveSpeedKmh * 1000) / 3600;
 
-  const estimatedMinutes = Math.round(distanceMeters / speedMetersPerMinute);
+  // Tempo de deslocamento puro no asfalto em segundos
+  const travelSeconds = distanceMeters / speedMetersPerSecond;
 
-  // Intervalo de Confiança Empírico de 95% (Variabilidade de trânsito urbano: +- 25%)
-  const minMinutes = Math.max(1, Math.floor(estimatedMinutes * 0.75));
-  const maxMinutes = Math.ceil(estimatedMinutes * 1.35);
+  // Tempo total somando a penalidade de embarque/desembarque de cada parada intermediária
+  const dwellSeconds = intermediateStopsCount * dwellTimeSecondsPerStop;
+  const totalSeconds = travelSeconds + dwellSeconds;
+
+  const estimatedMinutes = Math.max(1, Math.round(totalSeconds / 60));
+
+  // Intervalo de Confiança Empírico de 95%
+  const minMinutes = Math.max(1, Math.floor(estimatedMinutes * 0.8));
+  const maxMinutes = Math.ceil(estimatedMinutes * 1.3);
 
   return {
     minMinutes,
     estimatedMinutes,
     maxMinutes,
+    intermediateStops: intermediateStopsCount,
   };
 }
 
