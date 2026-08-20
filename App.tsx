@@ -120,9 +120,10 @@ const SNAP_COLLAPSED = 140;
 export default function App() {
   const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
   const [selectedLineNumber, setSelectedLineNumber] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [activeTab, setActiveTab] = useState<'lines' | 'favorites' | 'alert'>('lines');
   const [alertActive, setAlertActive] = useState<boolean>(false);
-  const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
   const [liveBuses, setLiveBuses] = useState<BusPosition[]>([]);
   const [isLiveLoading, setIsLiveLoading] = useState<boolean>(false);
   const [selectedStop, setSelectedStop] = useState<BusStop | null>(null);
@@ -256,7 +257,12 @@ export default function App() {
     return getAutoDiscoveredLines(userLocation, liveBuses, searchQuery, selectedStop).lines;
   }, [selectedStop, userLocation, liveBuses, searchQuery]);
 
-  const filteredLines = linesForClickedStop;
+  const filteredLines = useMemo(() => {
+    if (activeTab === 'favorites') {
+      return linesForClickedStop.filter((l) => favoriteLines.includes(l.number));
+    }
+    return linesForClickedStop;
+  }, [linesForClickedStop, activeTab, favoriteLines]);
 
   const selectedLine = filteredLines.find((l) => l.number === selectedLineNumber) || filteredLines[0] || NEARBY_TRANSIT_LINES[0];
 
@@ -323,18 +329,22 @@ export default function App() {
           }}
         />
 
-        {/* CONTROLES FLUTUANTES SUPERIORES */}
+        {/* BOTÃO FLUTUANTE DE MENU (3 BARRINHAS SOLTAS ☰) */}
         <TouchableOpacity
-          style={styles.profileFloatingBtn}
-          activeOpacity={0.8}
+          style={styles.menuFloatingBtn}
+          activeOpacity={0.7}
           onPress={() => setSettingsVisible(true)}
         >
-          <View style={styles.profileIconCircle}>
-            <Ionicons name="person" size={18} color="#FFFFFF" />
-          </View>
-          <View style={styles.gearBadge}>
-            <Ionicons name="settings" size={10} color="#000000" />
-          </View>
+          <Feather
+            name="menu"
+            size={28}
+            color="#FFFFFF"
+            style={{
+              textShadowColor: 'rgba(0, 0, 0, 0.8)',
+              textShadowOffset: { width: 0, height: 1.5 },
+              textShadowRadius: 4,
+            }}
+          />
         </TouchableOpacity>
 
         {/* BOTÃO REDONDO: RECENTRALIZAR NO USUÁRIO (MIRA) */}
@@ -426,6 +436,60 @@ export default function App() {
               </TouchableOpacity>
             )}
           </View>
+        </View>
+
+        {/* PÍLULAS DE CATEGORIA / ABAS RÁPIDAS (GOOGLE MAPS / MOOVIT STYLE) */}
+        <View style={styles.categoryPillsContainer}>
+          <TouchableOpacity
+            style={[styles.categoryPill, activeTab === 'lines' && styles.categoryPillActive]}
+            onPress={() => setActiveTab('lines')}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons
+              name="bus"
+              size={15}
+              color={activeTab === 'lines' ? '#0F172A' : '#949BA4'}
+            />
+            <Text style={[styles.categoryPillText, activeTab === 'lines' && styles.categoryPillTextActive]}>
+              Linhas
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.categoryPill, activeTab === 'favorites' && styles.categoryPillActive]}
+            onPress={() => setActiveTab('favorites')}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name={activeTab === 'favorites' ? 'star' : 'star-outline'}
+              size={14}
+              color={activeTab === 'favorites' ? '#0F172A' : '#F59E0B'}
+            />
+            <Text style={[styles.categoryPillText, activeTab === 'favorites' && styles.categoryPillTextActive]}>
+              Favoritos {favoriteLines.length > 0 ? `(${favoriteLines.length})` : ''}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.categoryPill, alertActive && styles.categoryPillAlertActive]}
+            onPress={() => {
+              if (selectedStop) {
+                setAlertActive(!alertActive);
+              } else {
+                setSettingsVisible(true);
+              }
+            }}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name={alertActive ? 'notifications' : 'notifications-outline'}
+              size={14}
+              color={alertActive ? '#FFFFFF' : '#38BDF8'}
+            />
+            <Text style={[styles.categoryPillText, alertActive && styles.categoryPillTextAlertActive]}>
+              {alertActive ? 'Alerta Ativo' : 'Alerta Descida'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* INDICADOR DO PONTO CLICADO OU MODO EXPLORAÇÃO (TOCÁVEL PARA DESELECIONAR) */}
@@ -637,35 +701,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1F22',
     zIndex: 1,
   },
-  profileFloatingBtn: {
+  menuFloatingBtn: {
     position: 'absolute',
     top: 24,
     left: SPACING.base,
     zIndex: 10,
-  },
-  profileIconCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#2B2D31',
-    borderWidth: 2,
-    borderColor: '#38BDF8',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-  },
-  gearBadge: {
-    position: 'absolute',
-    bottom: -2,
-    right: -2,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#F2F3F5',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   recenterFloatingBtn: {
     position: 'absolute',
@@ -674,17 +715,17 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   recenterIconCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#2B2D31',
-    borderWidth: 2,
-    borderColor: '#38BDF8',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(15, 23, 42, 0.92)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(56, 189, 248, 0.4)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+    shadowOpacity: 0.6,
+    shadowRadius: 10,
   },
   activeAlertBanner: {
     position: 'absolute',
@@ -799,6 +840,46 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '500',
+  },
+
+  /* --- Pílulas de Navegação Rápida (Abas) --- */
+  categoryPillsContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: COLUMNS.gutter,
+    paddingBottom: SPACING.sm,
+    gap: 8,
+  },
+  categoryPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1E293B',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    gap: 5,
+  },
+  categoryPillActive: {
+    backgroundColor: '#38BDF8',
+    borderColor: '#38BDF8',
+  },
+  categoryPillAlertActive: {
+    backgroundColor: '#0284C7',
+    borderColor: '#38BDF8',
+  },
+  categoryPillText: {
+    color: '#94A3B8',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  categoryPillTextActive: {
+    color: '#0F172A',
+    fontWeight: '700',
+  },
+  categoryPillTextAlertActive: {
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
 
   /* --- Cartões dos Pontos Próximos --- */

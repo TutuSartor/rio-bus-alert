@@ -159,11 +159,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   });
 
   return (
-    <Modal
-      visible={visible}
-      animationType="none"
-      transparent={true}
-      onRequestClose={onClose}
+    <View 
+      style={[StyleSheet.absoluteFill, { zIndex: 99999, elevation: 99999 }]} 
+      pointerEvents={visible ? 'auto' : 'none'}
     >
       {/* BACKDROP ANIMADO: Escurecimento suave e progressivo */}
       <TouchableWithoutFeedback onPress={onClose}>
@@ -573,7 +571,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </TouchableWithoutFeedback>
         </Animated.View>
       </TouchableWithoutFeedback>
-    </Modal>
+    </View>
   );
 };
 
